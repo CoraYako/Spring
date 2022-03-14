@@ -2,12 +2,14 @@ package com.libreria.entidades;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -25,27 +27,31 @@ public class Prestamo implements Serializable {
     private String id;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "fecha_prestamo", nullable = false)
-    private Date fechaPrestamo;
+    @Column(name = "prestamo", nullable = false)
+    private Date prestamo;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "fecha_devolucion", nullable = false)
-    private Date fechaDevolucion;
+    @Column(name = "devolucion", nullable = false)
+    private Date devolucion;
 
-    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "libro", nullable = false)
-    private Libro libro;
+    private List<Libro> libros;
 
-    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @OneToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "cliente", nullable = false)
     private Cliente cliente;
 
-    public Prestamo(String id, Date fechaPrestamo, Date fechaDevolucion, Libro libro, Cliente cliente) {
+    @Column(name = "activo")
+    private Boolean activo;
+
+    public Prestamo(String id, Date prestamo, Date devolucion, List<Libro> libros, Cliente cliente, Boolean activo) {
         this.id = id;
-        this.fechaPrestamo = fechaPrestamo;
-        this.fechaDevolucion = fechaDevolucion;
-        this.libro = libro;
+        this.prestamo = prestamo;
+        this.devolucion = devolucion;
+        this.libros = libros;
         this.cliente = cliente;
+        this.activo = activo;
     }
 
     public Prestamo() {
@@ -59,28 +65,28 @@ public class Prestamo implements Serializable {
         this.id = id;
     }
 
-    public Date getFechaPrestamo() {
-        return fechaPrestamo;
+    public Date getPrestamo() {
+        return prestamo;
     }
 
-    public void setFechaPrestamo(Date fechaPrestamo) {
-        this.fechaPrestamo = fechaPrestamo;
+    public void setPrestamo(Date prestamo) {
+        this.prestamo = prestamo;
     }
 
-    public Date getFechaDevolucion() {
-        return fechaDevolucion;
+    public Date getDevolucion() {
+        return devolucion;
     }
 
-    public void setFechaDevolucion(Date fechaDevolucion) {
-        this.fechaDevolucion = fechaDevolucion;
+    public void setDevolucion(Date devolucion) {
+        this.devolucion = devolucion;
     }
 
-    public Libro getLibro() {
-        return libro;
+    public List<Libro> getLibros() {
+        return libros;
     }
 
-    public void setLibro(Libro libro) {
-        this.libro = libro;
+    public void setLibros(List<Libro> libros) {
+        this.libros = libros;
     }
 
     public Cliente getCliente() {
@@ -91,9 +97,17 @@ public class Prestamo implements Serializable {
         this.cliente = cliente;
     }
 
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
+    }
+
     @Override
     public String toString() {
-        return "Prestamo{" + "id=" + id + ", fechaPrestamo=" + fechaPrestamo + ", fechaDevolucion=" + fechaDevolucion + ", libro=" + libro + ", cliente=" + cliente + '}';
+        return "Prestamo{" + "id=" + id + ", prestamo=" + prestamo + ", devolucion=" + devolucion + ", libros=" + libros + ", cliente=" + cliente + ", activo=" + activo + '}';
     }
 
 }

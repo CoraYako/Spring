@@ -21,9 +21,13 @@ public class Editorial implements Serializable {
     @Column(name = "nombre", nullable = false, unique = true)
     private String nombre;
 
-    public Editorial(String id, String nombre) {
+    @Column(name = "activo")
+    private Boolean activo;
+
+    public Editorial(String id, String nombre, Boolean activo) {
         this.id = id;
         this.nombre = nombre;
+        this.activo = activo;
     }
 
     public Editorial() {
@@ -45,9 +49,17 @@ public class Editorial implements Serializable {
         this.nombre = nombre;
     }
 
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
+    }
+
     @Override
     public String toString() {
-        return "Editorial{" + "id=" + id + ", nombre=" + nombre + '}';
+        return "Editorial{" + "id=" + id + ", nombre=" + nombre + ", activo=" + activo + '}';
     }
 
 }

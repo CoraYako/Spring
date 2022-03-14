@@ -21,9 +21,21 @@ public class Autor implements Serializable {
     @Column(name = "nombre_completo", nullable = false)
     private String nombre;
 
-    public Autor(String id, String nombre) {
+    @Column(name = "activo")
+    private Boolean activo;
+
+    public Autor(String id, String nombre, Boolean activo) {
         this.id = id;
         this.nombre = nombre;
+        this.activo = activo;
+    }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
     }
 
     public Autor() {
@@ -47,7 +59,7 @@ public class Autor implements Serializable {
 
     @Override
     public String toString() {
-        return "Autor{" + "id=" + id + ", nombre=" + nombre + '}';
+        return "Autor{" + "id=" + id + ", nombre=" + nombre + ", activo=" + activo + '}';
     }
 
 }

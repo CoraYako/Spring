@@ -7,7 +7,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -30,33 +30,37 @@ public class Libro implements Serializable {
     @Column(name = "año", nullable = false)
     private Integer anio;
 
-    @Column(name = "ejemplares_disponibles", nullable = false)
+    @Column(name = "ejemplares", nullable = false)
     private Integer ejemplares;
 
-    @Column(name = "ejemplares_prestados", nullable = false)
-    private Integer ejemplaresPrestados;
+    @Column(name = "prestados", nullable = false)
+    private Integer prestados;
 
-    @Column(name = "ejemplares_restantes", nullable = false)
-    private Integer ejemplaresRestantes;
+    @Column(name = "restantes", nullable = false)
+    private Integer restantes;
 
     @JoinColumn(name = "autor", nullable = false)
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Autor autor;
 
     @JoinColumn(name = "editorial", nullable = false)
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Editorial editorial;
 
-    public Libro(String id, Integer isbn, String titulo, Integer anio, Integer ejemplares, Integer ejemplaresPrestados, Integer ejemplaresRestantes, Autor autor, Editorial editorial) {
+    @Column(name = "activo")
+    private Boolean activo;
+
+    public Libro(String id, Integer isbn, String titulo, Integer anio, Integer ejemplares, Integer prestados, Integer restantes, Autor autor, Editorial editorial, Boolean activo) {
         this.id = id;
         this.isbn = isbn;
         this.titulo = titulo;
         this.anio = anio;
         this.ejemplares = ejemplares;
-        this.ejemplaresPrestados = ejemplaresPrestados;
-        this.ejemplaresRestantes = ejemplaresRestantes;
+        this.prestados = prestados;
+        this.restantes = restantes;
         this.autor = autor;
         this.editorial = editorial;
+        this.activo = activo;
     }
 
     public Libro() {
@@ -102,20 +106,20 @@ public class Libro implements Serializable {
         this.ejemplares = ejemplares;
     }
 
-    public Integer getEjemplaresPrestados() {
-        return ejemplaresPrestados;
+    public Integer getPrestados() {
+        return prestados;
     }
 
-    public void setEjemplaresPrestados(Integer ejemplaresPrestados) {
-        this.ejemplaresPrestados = ejemplaresPrestados;
+    public void setPrestados(Integer prestados) {
+        this.prestados = prestados;
     }
 
-    public Integer getEjemplaresRestantes() {
-        return ejemplaresRestantes;
+    public Integer getRestantes() {
+        return restantes;
     }
 
-    public void setEjemplaresRestantes(Integer ejemplaresRestantes) {
-        this.ejemplaresRestantes = ejemplaresRestantes;
+    public void setRestantes(Integer restantes) {
+        this.restantes = restantes;
     }
 
     public Autor getAutor() {
@@ -134,9 +138,17 @@ public class Libro implements Serializable {
         this.editorial = editorial;
     }
 
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
+    }
+
     @Override
     public String toString() {
-        return "Libro{" + "id=" + id + ", isbn=" + isbn + ", titulo=" + titulo + ", anio=" + anio + ", ejemplares=" + ejemplares + ", ejemplaresPrestados=" + ejemplaresPrestados + ", ejemplaresRestantes=" + ejemplaresRestantes + ", autor=" + autor + ", editorial=" + editorial + '}';
+        return "Libro{" + "id=" + id + ", isbn=" + isbn + ", titulo=" + titulo + ", anio=" + anio + ", ejemplares=" + ejemplares + ", prestados=" + prestados + ", restantes=" + restantes + ", autor=" + autor + ", editorial=" + editorial + ", activo=" + activo + '}';
     }
 
 }

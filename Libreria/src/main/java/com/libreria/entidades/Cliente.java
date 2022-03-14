@@ -30,12 +30,16 @@ public class Cliente implements Serializable {
     @Column(name = "telefono", nullable = false)
     private String telefono;
 
-    public Cliente(String id, Integer documento, String nombre, String apellido, String telefono) {
+    @Column(name = "activo")
+    private Boolean activo;
+
+    public Cliente(String id, Integer documento, String nombre, String apellido, String telefono, Boolean activo) {
         this.id = id;
         this.documento = documento;
         this.nombre = nombre;
         this.apellido = apellido;
         this.telefono = telefono;
+        this.activo = activo;
     }
 
     public Cliente() {
@@ -81,9 +85,17 @@ public class Cliente implements Serializable {
         this.telefono = telefono;
     }
 
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
+    }
+
     @Override
     public String toString() {
-        return "Cliente{" + "id=" + id + ", documento=" + documento + ", nombre=" + nombre + ", apellido=" + apellido + ", telefono=" + telefono + '}';
+        return "Cliente{" + "id=" + id + ", documento=" + documento + ", nombre=" + nombre + ", apellido=" + apellido + ", telefono=" + telefono + ", activo=" + activo + '}';
     }
 
 }
