@@ -16,7 +16,7 @@ public class AutorServicio {
 
     public Autor crearYGuardar(String nombre) throws ErrorServicio {
         if (nombre == null || nombre.trim().isEmpty()) {
-            throw new ErrorServicio("Debe indicar un nombre para el Autor.");
+            throw new ErrorServicio("Debe indicar un nombre válido para el Autor.");
         }
         Autor a = null;
         try {
@@ -45,7 +45,7 @@ public class AutorServicio {
 
     public void deshabilitar(String id) throws ErrorServicio {
         if (id == null || id.trim().isEmpty()) {
-            throw new ErrorServicio("Debe indicar un ID válido para el Autor");
+            throw new ErrorServicio("Debe indicar un identificador válido para el Autor.");
         }
         Optional<Autor> respuesta = autorRepositorio.findById(id);
         if (respuesta.isPresent()) {
@@ -72,9 +72,9 @@ public class AutorServicio {
         return autorRepositorio.findAll();
     }
 
-    public void validacion(String id, String nombre) throws ErrorServicio {
+    private void validacion(String id, String nombre) throws ErrorServicio {
         if (id == null || id.trim().isEmpty()) {
-            throw new ErrorServicio("Debe indicar un ID válido para el Autor.");
+            throw new ErrorServicio("Debe indicar un identificador válido para el Autor.");
         }
         if (nombre == null || nombre.trim().isEmpty()) {
             throw new ErrorServicio("Debe indicar un nombre válido para el Autor.");

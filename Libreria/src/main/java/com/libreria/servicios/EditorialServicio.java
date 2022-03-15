@@ -45,7 +45,7 @@ public class EditorialServicio {
 
     public void deshabilitar(String id) throws ErrorServicio {
         if (id == null || id.trim().isEmpty()) {
-            throw new ErrorServicio("Debe indicar un ID válido para la Editorial.");
+            throw new ErrorServicio("Debe indicar un identificador válido para la Editorial.");
         }
 
         Optional<Editorial> respuesta = editorialRepositorio.findById(id);
@@ -60,7 +60,7 @@ public class EditorialServicio {
 
     public Editorial buscarPorNombre(String nombre) throws ErrorServicio {
         if (nombre == null || nombre.trim().isEmpty()) {
-            throw new ErrorServicio("Debe indicar un nombre válido para la Editorial a buscar.");
+            throw new ErrorServicio("Debe indicar un nombre válido para la Editorial.");
         }
         return editorialRepositorio.buscarPorNombre(nombre);
     }
@@ -73,9 +73,9 @@ public class EditorialServicio {
         return editorialRepositorio.findAll();
     }
 
-    public void validacion(String id, String nombre) throws ErrorServicio {
+    private void validacion(String id, String nombre) throws ErrorServicio {
         if (id == null || id.trim().isEmpty()) {
-            throw new ErrorServicio("Debe indicar un ID válido para la Editorial.");
+            throw new ErrorServicio("Debe indicar un identificador válido para la Editorial.");
         }
         if (nombre == null || nombre.trim().isEmpty()) {
             throw new ErrorServicio("Debe indicar un nombre válido para la Editorial.");
