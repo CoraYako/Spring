@@ -1,11 +1,14 @@
 package com.libreria.entidades;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
@@ -24,10 +27,26 @@ public class Autor implements Serializable {
     @Column(name = "activo")
     private Boolean activo;
 
-    public Autor(String id, String nombre, Boolean activo) {
+    @Temporal(TemporalType.DATE)
+    @Column(name = "fecha_alta", nullable = false)
+    private Date alta;
+
+    public Autor(String id, String nombre, Date alta, Boolean activo) {
         this.id = id;
         this.nombre = nombre;
+        this.alta = alta;
         this.activo = activo;
+    }
+
+    public Autor() {
+    }
+
+    public Date getAlta() {
+        return alta;
+    }
+
+    public void setAlta(Date alta) {
+        this.alta = alta;
     }
 
     public Boolean getActivo() {
@@ -36,9 +55,6 @@ public class Autor implements Serializable {
 
     public void setActivo(Boolean activo) {
         this.activo = activo;
-    }
-
-    public Autor() {
     }
 
     public String getId() {
@@ -59,7 +75,7 @@ public class Autor implements Serializable {
 
     @Override
     public String toString() {
-        return "Autor{" + "id=" + id + ", nombre=" + nombre + ", activo=" + activo + '}';
+        return "Autor{" + "id=" + id + ", nombre=" + nombre + ", activo=" + activo + ", alta=" + alta + '}';
     }
 
 }

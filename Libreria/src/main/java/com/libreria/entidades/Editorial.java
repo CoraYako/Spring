@@ -1,11 +1,14 @@
 package com.libreria.entidades;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
@@ -21,16 +24,29 @@ public class Editorial implements Serializable {
     @Column(name = "nombre", nullable = false, unique = true)
     private String nombre;
 
+    @Temporal(TemporalType.DATE)
+    @Column(name = "fecha_alta", nullable = false)
+    private Date alta;
+
     @Column(name = "activo")
     private Boolean activo;
 
-    public Editorial(String id, String nombre, Boolean activo) {
+    public Editorial(String id, String nombre, Date alta, Boolean activo) {
         this.id = id;
         this.nombre = nombre;
+        this.alta = alta;
         this.activo = activo;
     }
 
     public Editorial() {
+    }
+
+    public Date getAlta() {
+        return alta;
+    }
+
+    public void setAlta(Date alta) {
+        this.alta = alta;
     }
 
     public String getId() {
@@ -59,7 +75,7 @@ public class Editorial implements Serializable {
 
     @Override
     public String toString() {
-        return "Editorial{" + "id=" + id + ", nombre=" + nombre + ", activo=" + activo + '}';
+        return "Editorial{" + "id=" + id + ", nombre=" + nombre + ", alta=" + alta + ", activo=" + activo + '}';
     }
 
 }

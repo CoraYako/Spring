@@ -1,6 +1,7 @@
 package com.libreria.entidades;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
@@ -47,10 +50,16 @@ public class Libro implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Editorial editorial;
 
+    @Temporal(TemporalType.TIME)
+    @Column(name = "fecha_alta", nullable = false)
+    private Date alta;
+
     @Column(name = "activo")
     private Boolean activo;
 
-    public Libro(String id, Integer isbn, String titulo, Integer anio, Integer ejemplares, Integer prestados, Integer restantes, Autor autor, Editorial editorial, Boolean activo) {
+    public Libro(String id, Integer isbn, String titulo, Integer anio,
+            Integer ejemplares, Integer prestados, Integer restantes,
+            Autor autor, Editorial editorial, Date alta, Boolean activo) {
         this.id = id;
         this.isbn = isbn;
         this.titulo = titulo;
@@ -60,10 +69,19 @@ public class Libro implements Serializable {
         this.restantes = restantes;
         this.autor = autor;
         this.editorial = editorial;
+        this.alta = alta;
         this.activo = activo;
     }
 
     public Libro() {
+    }
+
+    public Date getAlta() {
+        return alta;
+    }
+
+    public void setAlta(Date alta) {
+        this.alta = alta;
     }
 
     public String getId() {
@@ -148,7 +166,7 @@ public class Libro implements Serializable {
 
     @Override
     public String toString() {
-        return "Libro{" + "id=" + id + ", isbn=" + isbn + ", titulo=" + titulo + ", anio=" + anio + ", ejemplares=" + ejemplares + ", prestados=" + prestados + ", restantes=" + restantes + ", autor=" + autor + ", editorial=" + editorial + ", activo=" + activo + '}';
+        return "Libro{" + "id=" + id + ", isbn=" + isbn + ", titulo=" + titulo + ", anio=" + anio + ", ejemplares=" + ejemplares + ", prestados=" + prestados + ", restantes=" + restantes + ", autor=" + autor + ", editorial=" + editorial + ", alta=" + alta + ", activo=" + activo + '}';
     }
 
 }
