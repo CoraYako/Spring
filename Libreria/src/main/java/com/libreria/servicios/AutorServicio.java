@@ -18,34 +18,37 @@ public class AutorServicio {
     private AutorRepositorio autorRepositorio;
 
     @Transactional(rollbackFor = Exception.class)
-    public Autor crearYGuardar(String nombre) throws ErrorInputException {
-        if (nombre == null || nombre.trim().isEmpty()) {
-            throw new ErrorInputException("Debe indicar un nombre válido para el Autor.");
-        }
+    public Autor crearYGuardar(String nombre, String apellido) throws ErrorInputException {
+        validacion(nombre, apellido);
         Autor a = new Autor();
         a.setNombre(nombre);
+        a.setApellido(apellido);
         a.setAlta(new Date());
         a.setActivo(true);
         return autorRepositorio.save(a);
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public Autor modificar(String id, String nombre) throws ErrorInputException, ElementoNoEncontradoException {
-        validacion(id, nombre);
+    public Autor modificar(String id, String nombre, String apellido) throws ErrorInputException, ElementoNoEncontradoException {
+        if (id == null || id.trim().isEmpty()) {
+            throw new ErrorInputException("El ID no puede estar vacío.");
+        }
+        validacion(nombre, apellido);
         Optional<Autor> respuesta = autorRepositorio.findById(id);
         if (respuesta.isPresent()) {
             Autor a = respuesta.get();
             a.setNombre(nombre);
+            a.setApellido(apellido);
             return autorRepositorio.save(a);
         } else {
-            throw new ElementoNoEncontradoException("No se encontró el Autor solicitado.");
+            throw new ElementoNoEncontradoException("No se encontró el autor solicitado.");
         }
     }
 
     @Transactional(rollbackFor = Exception.class)
     public Autor deshabilitar(String id) throws ErrorInputException, ElementoNoEncontradoException {
         if (id == null || id.trim().isEmpty()) {
-            throw new ErrorInputException("Debe indicar un identificador válido para el Autor.");
+            throw new ErrorInputException("El ID no puede estar vacío.");
         }
         Optional<Autor> respuesta = autorRepositorio.findById(id);
         if (respuesta.isPresent()) {
@@ -53,27 +56,27 @@ public class AutorServicio {
             a.setActivo(false);
             return autorRepositorio.save(a);
         } else {
-            throw new ElementoNoEncontradoException("No se encontró el Autor solicitado.");
+            throw new ElementoNoEncontradoException("No se encontró el autor solicitado.");
         }
     }
 
     @Transactional(readOnly = true)
     public Autor buscarPorId(String id) throws ErrorInputException, ElementoNoEncontradoException {
         if (id == null || id.trim().isEmpty()) {
-            throw new ErrorInputException("Debe indicar un identificador válido para el Autor.");
+            throw new ErrorInputException("El ID no puede estar vacío.");
         }
         Optional<Autor> respuesta = autorRepositorio.findById(id);
         if (respuesta.isPresent()) {
             return respuesta.get();
         } else {
-            throw new ElementoNoEncontradoException("No se encontró el Autor solicitado.");
+            throw new ElementoNoEncontradoException("No se encontró el autor solicitado.");
         }
     }
 
     @Transactional(readOnly = true)
     public List<Autor> buscarPorNombre(String nombre) throws ErrorInputException {
         if (nombre == null || nombre.trim().isEmpty()) {
-            throw new ErrorInputException("Debe indicar un nombre válido para el Autor");
+            throw new ErrorInputException("El nombre no puede estar vacío.");
         }
         return autorRepositorio.buscarPorNombre(nombre);
     }
@@ -88,12 +91,12 @@ public class AutorServicio {
         return autorRepositorio.findAll();
     }
 
-    private void validacion(String id, String nombre) throws ErrorInputException {
-        if (id == null || id.trim().isEmpty()) {
-            throw new ErrorInputException("Debe indicar un identificador válido para el Autor.");
-        }
+    private void validacion(String nombre, String apellido) throws ErrorInputException {
         if (nombre == null || nombre.trim().isEmpty()) {
-            throw new ErrorInputException("Debe indicar un nombre válido para el Autor.");
+            throw new ErrorInputException("El nombre no puede estar vacío.");
+        }
+        if (apellido == null || apellido.trim().isEmpty()) {
+            throw new ErrorInputException("El apellido no puede estar vacío.");
         }
     }
 

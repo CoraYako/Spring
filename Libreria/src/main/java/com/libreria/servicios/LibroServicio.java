@@ -29,14 +29,7 @@ public class LibroServicio {
     public Libro crearYGuardar(Integer isbn, String titulo, Integer anio,
             Integer ejemplares, Integer prestados, Integer restantes,
             Autor autor, Editorial editorial) throws ErrorInputException {
-        validacion(isbn, titulo, anio, ejemplares, prestados, restantes);
-
-        if (autor == null) {
-            throw new ErrorInputException("Debe indicar un Autor válido.");
-        }
-        if (editorial == null) {
-            throw new ErrorInputException("Debe indicar una Editorial válida.");
-        }
+        validacion(isbn, titulo, anio, ejemplares, prestados, restantes, autor, editorial);
 
         Libro l = new Libro();
         l.setIsbn(isbn);
@@ -57,10 +50,10 @@ public class LibroServicio {
     public Libro modificar(String idLibro, String idAutor, String idEditorial,
             Integer isbn, String titulo, Integer anio,
             Integer ejemplares, Integer prestados, Integer restantes) throws ErrorInputException, ElementoNoEncontradoException {
-        validacion(isbn, titulo, anio, ejemplares, prestados, restantes);
-
         Autor autor = autorServicio.buscarPorId(idAutor);
         Editorial editorial = editorialServicio.buscarPorId(idEditorial);
+
+        validacion(isbn, titulo, anio, ejemplares, prestados, restantes, autor, editorial);
 
         Optional<Libro> respuesta = libroRepositorio.findById(idLibro);
         if (respuesta.isPresent()) {
@@ -119,8 +112,8 @@ public class LibroServicio {
     }
 
     private void validacion(Integer isbn, String titulo, Integer anio,
-            Integer ejemplares, Integer prestados, Integer restantes/*,
-            Autor autor, Editorial editorial*/) throws ErrorInputException {
+            Integer ejemplares, Integer prestados, Integer restantes,
+            Autor autor, Editorial editorial) throws ErrorInputException {
         if (isbn == null || isbn < 1) {
             throw new ErrorInputException("Debe indicar el ISBN correcto.");
         }
@@ -139,12 +132,12 @@ public class LibroServicio {
         if (restantes == null || restantes < 0) {
             throw new ErrorInputException("Debe indicar una cantidad igual o mayor a cero (0).");
         }
-        /*if (autor == null) {
+        if (autor == null) {
             throw new ErrorInputException("Debe indicar un Autor existente o válido.");
         }
         if (editorial == null) {
             throw new ErrorInputException("Debe indicar una Editorial existente o válida.");
-        }*/
+        }
     }
 
 }

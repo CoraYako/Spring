@@ -12,7 +12,7 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name = "autores")
+@Table(name = "editoriales")
 public class Editorial implements Serializable {
 
     @Id

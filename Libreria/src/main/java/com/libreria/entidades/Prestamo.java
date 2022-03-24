@@ -2,14 +2,12 @@ package com.libreria.entidades;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -34,9 +32,9 @@ public class Prestamo implements Serializable {
     @Column(name = "devolucion", nullable = false)
     private Date devolucion;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "libro", nullable = false)
-    private List<Libro> libros;
+    private Libro libro;
 
     @OneToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "cliente", nullable = false)
@@ -45,11 +43,11 @@ public class Prestamo implements Serializable {
     @Column(name = "activo")
     private Boolean activo;
 
-    public Prestamo(String id, Date prestamo, Date devolucion, List<Libro> libros, Cliente cliente, Boolean activo) {
+    public Prestamo(String id, Date prestamo, Date devolucion, Libro libro, Cliente cliente, Boolean activo) {
         this.id = id;
         this.prestamo = prestamo;
         this.devolucion = devolucion;
-        this.libros = libros;
+        this.libro = libro;
         this.cliente = cliente;
         this.activo = activo;
     }
@@ -81,12 +79,12 @@ public class Prestamo implements Serializable {
         this.devolucion = devolucion;
     }
 
-    public List<Libro> getLibros() {
-        return libros;
+    public Libro getLibro() {
+        return libro;
     }
 
-    public void setLibros(List<Libro> libros) {
-        this.libros = libros;
+    public void setLibro(Libro libro) {
+        this.libro = libro;
     }
 
     public Cliente getCliente() {
@@ -107,7 +105,7 @@ public class Prestamo implements Serializable {
 
     @Override
     public String toString() {
-        return "Prestamo{" + "id=" + id + ", prestamo=" + prestamo + ", devolucion=" + devolucion + ", libros=" + libros + ", cliente=" + cliente + ", activo=" + activo + '}';
+        return "Prestamo{" + "id=" + id + ", prestamo=" + prestamo + ", devolucion=" + devolucion + ", libro=" + libro + ", cliente=" + cliente + ", activo=" + activo + '}';
     }
 
 }
