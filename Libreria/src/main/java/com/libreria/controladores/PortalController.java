@@ -18,7 +18,9 @@ public class PortalController {
     
     @PreAuthorize("hasAnyRole('ROLE_ADMIN') || hasAnyRole('ROLE_USER')")
     @GetMapping("/inicio")
-    public String inicio() {
+    public String inicio(ModelMap modelo) {
+//        modelo.put("sesion", usuariosession);
+        
         return "inicio.html";
     }
     
