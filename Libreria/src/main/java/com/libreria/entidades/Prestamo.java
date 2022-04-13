@@ -24,11 +24,11 @@ public class Prestamo implements Serializable {
     @Column(name = "id_prestamo")
     private String id;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "prestamo", nullable = false)
     private Date prestamo;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "devolucion", nullable = false)
     private Date devolucion;
 

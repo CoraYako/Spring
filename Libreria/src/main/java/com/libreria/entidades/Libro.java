@@ -25,7 +25,7 @@ public class Libro implements Serializable {
     private String id;
 
     @Column(name = "isbn", unique = true, nullable = false)
-    private Integer isbn;
+    private String isbn;
 
     @Column(name = "titulo", nullable = false, unique = true)
     private String titulo;
@@ -42,22 +42,22 @@ public class Libro implements Serializable {
     @Column(name = "restantes", nullable = false)
     private Integer restantes;
 
-    @JoinColumn(name = "autor", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "autor", nullable = false)
     private Autor autor;
 
-    @JoinColumn(name = "editorial", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "editorial", nullable = false)
     private Editorial editorial;
 
-    @Temporal(TemporalType.TIME)
+    @Temporal(TemporalType.DATE)
     @Column(name = "fecha_alta", nullable = false)
     private Date alta;
 
     @Column(name = "activo")
     private Boolean activo;
 
-    public Libro(String id, Integer isbn, String titulo, Integer anio,
+    public Libro(String id, String isbn, String titulo, Integer anio,
             Integer ejemplares, Integer prestados, Integer restantes,
             Autor autor, Editorial editorial, Date alta, Boolean activo) {
         this.id = id;
@@ -92,11 +92,11 @@ public class Libro implements Serializable {
         this.id = id;
     }
 
-    public Integer getIsbn() {
+    public String getIsbn() {
         return isbn;
     }
 
-    public void setIsbn(Integer isbn) {
+    public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
 

@@ -1,9 +1,9 @@
 package com.libreria.controladores;
 
-import com.libreria.entidades.Autor;
+import com.libreria.entidades.Editorial;
 import com.libreria.excepciones.ElementoNoEncontradoException;
 import com.libreria.excepciones.ErrorInputException;
-import com.libreria.servicios.AutorServicio;
+import com.libreria.servicios.EditorialServicio;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,63 +16,61 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @PreAuthorize("hasAnyRole('ROLE_ADMIN') || hasAnyRole('ROLE_USER')")
-@RequestMapping("/autor")
-public class AutorController {
+@RequestMapping("/editorial")
+public class EditorialController {
 
     @Autowired
-    private AutorServicio autorServicio;
+    private EditorialServicio editorialServicio;
 
     @GetMapping("/lista")
-    public String lista(ModelMap modelo) {
-        List<Autor> autores = autorServicio.listarTodos();
+    public String inicio(ModelMap modelo) {
+        List<Editorial> editoriales = editorialServicio.listarTodos();
 
-        modelo.put("autores", autores);
+        modelo.put("editoriales", editoriales);
 
-        return "autor-lista.html";
+        return "editorial-lista.html";
     }
 
     @GetMapping("/registrar-editar")
     public String registro(ModelMap modelo, @RequestParam(required = false) String id) {
-        Autor autor = new Autor();
+        Editorial editorial = new Editorial();
 
         try {
             if (id != null && !id.trim().isEmpty()) {
-                autor = autorServicio.buscarPorId(id);
+                editorial = editorialServicio.buscarPorId(id);
             }
-            modelo.put("autor", autor);
-        } catch (ErrorInputException | ElementoNoEncontradoException ex) {
+        } catch (ElementoNoEncontradoException | ErrorInputException ex) {
             modelo.put("error", ex.getMessage());
         }
 
-        return "autor-registro.html";
+        modelo.put("editorial", editorial);
+        return "editorial-registro.html";
     }
 
     @PostMapping("/registrar-editar")
-    public String registroEdicion(ModelMap modelo, @RequestParam(required = false) String id,
-            @RequestParam String nombre, @RequestParam String apellido) {
-        Autor autor = new Autor();
+    public String registroEdicion(ModelMap modelo, @RequestParam(required = false) String id, @RequestParam String nombre) {
+        Editorial editorial = new Editorial();
 
         try {
             if (id == null || id.trim().isEmpty()) {
-                autor = autorServicio.crearYGuardar(nombre, apellido);
+                editorial = editorialServicio.crearYGuardar(nombre);
             } else {
-                autor = autorServicio.modificar(id, nombre, apellido);
+                editorial = editorialServicio.modificar(id, nombre);
             }
 
-            modelo.put("autor", autor);
+            modelo.put("editorial", editorial);
             modelo.put("titulo", "!Perfecto!");
-            modelo.put("descripcion", "El autor fue guardado satisfactoriamente en la base de datos.");
+            modelo.put("descripcion", "El Editorial fue guardado satisfactoriamente en la base de datos.");
         } catch (ErrorInputException | ElementoNoEncontradoException ex) {
-            autor.setId(id);
-            autor.setNombre(nombre);
+            editorial.setId(id);
+            editorial.setNombre(nombre);
 
-            modelo.put("autor", autor);
+            modelo.put("editorial", editorial);
             modelo.put("error", ex.getMessage());
             modelo.put("nombre", nombre);
-            modelo.put("apellido", apellido);
         }
 
-        return "autor-registro.html";
+        return "editorial-registro.html";
     }
 
 }

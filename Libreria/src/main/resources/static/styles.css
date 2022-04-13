@@ -4,3 +4,11 @@
     margin: 70px 25px 0 25px;
     padding: 15px;
 }
+
+.danger-font {
+    color: red;
+}
+
+.succesful-font {
+    color: green;
+}

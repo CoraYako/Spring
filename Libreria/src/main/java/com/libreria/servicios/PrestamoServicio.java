@@ -26,10 +26,14 @@ public class PrestamoServicio {
     private ClienteServicio clienteServicio;
 
     @Transactional(rollbackFor = Exception.class)
-    public Prestamo crearYGuardar(Date prestamo, Date devolucion, Libro libro, Cliente cliente) throws ErrorInputException {
-        validacion(prestamo, devolucion, libro, cliente);
+    public Prestamo crearYGuardar(Date prestamo, Date devolucion, String idLibro, String idCliente) throws ErrorInputException, ElementoNoEncontradoException {
+        validacion(prestamo, devolucion, idLibro, idCliente);
+        
+        Libro libro = libroServicio.buscarPorId(idLibro);
+        Cliente cliente = clienteServicio.buscarPorId(idCliente);
 
         Prestamo p = new Prestamo();
+        
         p.setPrestamo(prestamo);
         p.setDevolucion(devolucion);
         p.setLibro(libro);
@@ -45,7 +49,7 @@ public class PrestamoServicio {
         Libro libro = libroServicio.buscarPorId(idLibro);
         Cliente cliente = clienteServicio.buscarPorId(idCliente);
 
-        validacion(prestamo, devolucion, libro, cliente);
+        validacion(prestamo, devolucion, idLibro, idCliente);
 
         Optional<Prestamo> respuesta = prestamoRepositorio.findById(idPrestamo);
         if (respuesta.isPresent()) {
@@ -100,17 +104,17 @@ public class PrestamoServicio {
         return prestamoRepositorio.buscarActivos();
     }
 
-    private void validacion(Date prestamo, Date devolucion, Libro libro, Cliente cliente) throws ErrorInputException {
+    private void validacion(Date prestamo, Date devolucion, String idLibro, String idCliente) throws ErrorInputException {
         if (prestamo == null) {
             throw new ErrorInputException("Debe de indicar la fecha de inicio del Préstamo.");
         }
         if (devolucion == null) {
             throw new ErrorInputException("Debe de indicar una fecha de devolución para el Préstamo.");
         }
-        if (libro == null) {
+        if (idLibro == null || idLibro.trim().isEmpty()) {
             throw new ErrorInputException("Debe de indicar el Libro a prestar.");
         }
-        if (cliente == null) {
+        if (idCliente == null || idCliente.trim().isEmpty()) {
             throw new ErrorInputException("Debe de indicar el Cliente.");
         }
     }

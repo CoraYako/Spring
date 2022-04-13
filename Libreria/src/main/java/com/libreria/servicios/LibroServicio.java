@@ -26,9 +26,12 @@ public class LibroServicio {
     private EditorialServicio editorialServicio;
 
     @Transactional(rollbackFor = Exception.class)
-    public Libro crearYGuardar(Integer isbn, String titulo, Integer anio,
+    public Libro crearYGuardar(String isbn, String titulo, Integer anio,
             Integer ejemplares, Integer prestados, Integer restantes,
-            Autor autor, Editorial editorial) throws ErrorInputException {
+            String idAutor, String idEditorial) throws ErrorInputException, ElementoNoEncontradoException {
+        Autor autor = autorServicio.buscarPorId(idAutor);
+        Editorial editorial = editorialServicio.buscarPorId(idEditorial);
+
         validacion(isbn, titulo, anio, ejemplares, prestados, restantes, autor, editorial);
 
         Libro l = new Libro();
@@ -48,7 +51,7 @@ public class LibroServicio {
 
     @Transactional(rollbackFor = Exception.class)
     public Libro modificar(String idLibro, String idAutor, String idEditorial,
-            Integer isbn, String titulo, Integer anio,
+            String isbn, String titulo, Integer anio,
             Integer ejemplares, Integer prestados, Integer restantes) throws ErrorInputException, ElementoNoEncontradoException {
         Autor autor = autorServicio.buscarPorId(idAutor);
         Editorial editorial = editorialServicio.buscarPorId(idEditorial);
@@ -69,14 +72,14 @@ public class LibroServicio {
 
             return libroRepositorio.save(libro);
         } else {
-            throw new ElementoNoEncontradoException("No se encontró el Libro solicitado.");
+            throw new ElementoNoEncontradoException("No se encontró el libro solicitado.");
         }
     }
 
     @Transactional(rollbackFor = Exception.class)
     public void deshabilitar(String id) throws ErrorInputException, ElementoNoEncontradoException {
         if (id == null || id.trim().isEmpty()) {
-            throw new ErrorInputException("El identificador proporcionado para el Libro no es correcto.");
+            throw new ErrorInputException("El identificador proporcionado para el libro no es correcto.");
         }
         Optional<Libro> respuesta = libroRepositorio.findById(id);
         if (respuesta.isPresent()) {
@@ -84,20 +87,20 @@ public class LibroServicio {
             libro.setActivo(false);
             libroRepositorio.save(libro);
         } else {
-            throw new ElementoNoEncontradoException("No se encontró el Libro solicitado.");
+            throw new ElementoNoEncontradoException("No se encontró el libro solicitado.");
         }
     }
 
     @Transactional(readOnly = true)
     public Libro buscarPorId(String id) throws ErrorInputException, ElementoNoEncontradoException {
         if (id == null || id.trim().isEmpty()) {
-            throw new ErrorInputException("El identificador proporcionado para el Libro no es correcto.");
+            throw new ErrorInputException("El identificador proporcionado para el libro no es correcto.");
         }
         Optional<Libro> respuesta = libroRepositorio.findById(id);
         if (respuesta.isPresent()) {
             return respuesta.get();
         } else {
-            throw new ElementoNoEncontradoException("No se encontró el Libro solicitado.");
+            throw new ElementoNoEncontradoException("No se encontró el libro solicitado.");
         }
     }
 
@@ -111,32 +114,32 @@ public class LibroServicio {
         return libroRepositorio.buscarActivos();
     }
 
-    private void validacion(Integer isbn, String titulo, Integer anio,
+    private void validacion(String isbn, String titulo, Integer anio,
             Integer ejemplares, Integer prestados, Integer restantes,
             Autor autor, Editorial editorial) throws ErrorInputException {
-        if (isbn == null || isbn < 1) {
-            throw new ErrorInputException("Debe indicar el ISBN correcto.");
+        if (isbn == null || isbn.trim().isEmpty()) {
+            throw new ErrorInputException("El código ISBN no debe estar vacío.");
         }
         if (titulo == null || titulo.trim().isEmpty()) {
-            throw new ErrorInputException("Debe indicar un título válido.");
+            throw new ErrorInputException("El título no debe quedar vacío.");
         }
         if (anio == null || anio < 1000) {
-            throw new ErrorInputException("Debe indicar un año válido.");
+            throw new ErrorInputException("El año no puede estar vacío.");
         }
         if (ejemplares == null || ejemplares < 0) {
-            throw new ErrorInputException("Debe indicar una cantidad válidad de ejempares disponibles.");
+            throw new ErrorInputException("La cantidad de ejempares no puede ser inferior a cero.");
         }
         if (prestados == null || prestados < 0) {
-            throw new ErrorInputException("Debe indicar una cantidad igual o mayor a cero (0)");
+            throw new ErrorInputException("La cantidad de ejempares prestados no puede ser inferior a cero.");
         }
         if (restantes == null || restantes < 0) {
-            throw new ErrorInputException("Debe indicar una cantidad igual o mayor a cero (0).");
+            throw new ErrorInputException("La cantidad de ejempares restantes no puede ser inferior a cero.");
         }
         if (autor == null) {
-            throw new ErrorInputException("Debe indicar un Autor existente o válido.");
+            throw new ErrorInputException("Debe seleccionar un autor.");
         }
         if (editorial == null) {
-            throw new ErrorInputException("Debe indicar una Editorial existente o válida.");
+            throw new ErrorInputException("Debe indicar una Editorial.");
         }
     }
 

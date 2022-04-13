@@ -24,9 +24,6 @@ public class Autor implements Serializable {
     @Column(name = "nombre", nullable = false)
     private String nombre;
 
-    @Column(name = "apellido", nullable = false)
-    private String apellido;
-
     @Column(name = "activo")
     private Boolean activo;
 
@@ -34,10 +31,9 @@ public class Autor implements Serializable {
     @Column(name = "fecha_alta", nullable = false)
     private Date alta;
 
-    public Autor(String id, String nombre, String apellido, Date alta, Boolean activo) {
+    public Autor(String id, String nombre, Date alta, Boolean activo) {
         this.id = id;
         this.nombre = nombre;
-        this.apellido = apellido;
         this.alta = alta;
         this.activo = activo;
     }
@@ -77,17 +73,9 @@ public class Autor implements Serializable {
         this.nombre = nombre;
     }
 
-    public String getApellido() {
-        return apellido;
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
-
     @Override
     public String toString() {
-        return "Autor{" + "id=" + id + ", nombre=" + nombre + ", apellido=" + apellido + ", activo=" + activo + ", alta=" + alta + '}';
+        return "Autor{" + "id=" + id + ", nombre=" + nombre + ", activo=" + activo + ", alta=" + alta + '}';
     }
 
 }
