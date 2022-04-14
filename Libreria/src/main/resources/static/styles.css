@@ -9,16 +9,22 @@
     color: red;
 }
 
+.p-r {
+    padding-left: 4%;
+}
+
+.p-l {
+    padding-right: 4%;
+}
+
 .succesful-font {
     color: green;
 }
 
-.profile-img{
-    margin-top: -5px;
-    margin-right: 5px;
-    float: left;
-    background: url(example.jpg) 50% 50% no-repeat; /* 50% 50% centers image in div */
-    background-size: auto 100%; /* Interchange this value depending on prefering width vs. height */
-    width: 30px;
-    height: 30px;
-}
+.bg-custom-1 {
+    background-color: #85144b;
+  }
+  
+  .bg-custom-2 {
+  background-image: linear-gradient(15deg, #13547a 0%, #80d0c7 100%);
+  }
