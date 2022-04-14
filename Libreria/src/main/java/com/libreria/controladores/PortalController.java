@@ -1,5 +1,6 @@
 package com.libreria.controladores;
 
+import javax.servlet.http.HttpSession;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -18,8 +19,8 @@ public class PortalController {
     
     @PreAuthorize("hasAnyRole('ROLE_ADMIN') || hasAnyRole('ROLE_USER')")
     @GetMapping("/inicio")
-    public String inicio(ModelMap modelo) {
-//        modelo.put("sesion", usuariosession);
+    public String inicio(ModelMap modelo, HttpSession session) {
+        modelo.put("usuariosession", session);
         
         return "inicio.html";
     }

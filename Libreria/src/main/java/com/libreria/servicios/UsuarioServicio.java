@@ -107,6 +107,19 @@ public class UsuarioServicio implements UserDetailsService {
     }
 
     @Transactional(readOnly = true)
+    public Usuario buscarPorId(String id) throws ErrorInputException, ElementoNoEncontradoException {
+        if (id == null || id.trim().isEmpty()) {
+            throw new ErrorInputException("El identificador del usuario no puede ser nulo.");
+        }
+        Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
+        if (respuesta.isPresent()) {
+            return respuesta.get();
+        } else {
+            throw new ElementoNoEncontradoException("No se encontró el usuario solicitado.");
+        }
+    }
+
+    @Transactional(readOnly = true)
     public List<Usuario> listarTodos() {
         return usuarioRepositorio.findAll();
     }
