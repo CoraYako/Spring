@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,8 +32,8 @@ public class AutorController {
         return "autor-lista.html";
     }
 
-    @GetMapping("/registrar-editar")
-    public String registro(ModelMap modelo, @RequestParam(required = false) String id) {
+    @GetMapping("/registrar")
+    public String registrar(ModelMap modelo, @RequestParam(required = false) String id) {
         Autor autor = new Autor();
 
         try {
@@ -45,6 +46,48 @@ public class AutorController {
         }
 
         return "autor-registro.html";
+    }
+
+    @GetMapping("/editar/{id}")
+    public String editar(ModelMap modelo, @PathVariable String id) {
+        Autor autor = new Autor();
+
+        try {
+            if (id != null && !id.trim().isEmpty()) {
+                autor = autorServicio.buscarPorId(id);
+            }
+            modelo.put("autor", autor);
+        } catch (ErrorInputException | ElementoNoEncontradoException ex) {
+            modelo.put("error", ex.getMessage());
+        }
+
+        return "autor-registro.html";
+    }
+
+    @GetMapping("/deshabilitar/{id}")
+    public String deshabilitarGet(ModelMap modelo, @PathVariable String id) {
+        Autor autor = new Autor();
+
+        try {
+            if (id != null && !id.trim().isEmpty()) {
+                autor = autorServicio.buscarPorId(id);
+            }
+            modelo.put("autor", autor);
+        } catch (ElementoNoEncontradoException | ErrorInputException ex) {
+            modelo.put("error", ex.getMessage());
+        }
+
+        return "autor-deshabilitar.html";
+    }
+
+    @PostMapping("/deshabilitar")
+    public String deshabilitarPost(ModelMap modelo, @RequestParam String id) {
+        try {
+            autorServicio.deshabilitar(id);
+        } catch (ElementoNoEncontradoException | ErrorInputException ex) {
+            modelo.put("error", ex.getMessage());
+        }
+        return "redirect:/autor/lista";
     }
 
     @PostMapping("/registrar-editar")
@@ -61,7 +104,7 @@ public class AutorController {
 
             modelo.put("autor", autor);
             modelo.put("titulo", "!Perfecto!");
-            modelo.put("descripcion", "El autor fue guardado satisfactoriamente en la base de datos.");
+            modelo.put("descripcion", "El autor fue guardado satisfactoriamente.");
         } catch (ErrorInputException | ElementoNoEncontradoException ex) {
             autor.setId(id);
             autor.setNombre(nombre);

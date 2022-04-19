@@ -7,36 +7,35 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
               integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-        <link rel="stylesheet" href="../styles.css/">
+        <link rel="stylesheet" href="./styles.css/">
         <title>Registrar Autor</title>
     </head>
 
     <body>
-        <h1>Administración de Autores</h1>
-        <p>Utilice éste módulo para 
-            <span th:text="${autor.id != null ? 'editar el' : 'registrar un nuevo'}"></span> autor.
-        </p>
-
-        <div>
-            <p class="danger-font" th:text="${error != null ? error : ''}"></p>
+        <div class="container">
+            <h1>Administración de Autores</h1>
+            <p>Utilice éste módulo para deshabilitar el autor seleccionado.</p>
         </div>
+        <!--        <div>
+                    <p class="danger-font" th:text="${error != null ? error : ''}"></p>
+                </div>-->
 
-        <div>
+        <div class="container">
             <h3 th:text="${titulo}"></h3>
             <p th:text="${descripcion}"></p>
         </div>
 
-        <form class="margenes-form" th:action="@{/autor/registrar-editar}" method="POST">
+        <form class="container" th:action="@{/autor/deshabilitar}" th:object="${autor}" method="POST">
             <input type="hidden" name="id" th:value="${autor.id}">
             <div class="mb-3">
                 <label for="nombreAutor" class="form-label">Nombre</label>
-                <input type="text" class="form-control" id="nombreAutor" name="nombre" th:value="${autor != null ? autor.nombre : (nombre)}">
+                <input type="text" class="form-control" id="nombreAutor" name="nombre" th:value="${autor.nombre}" readonly="readonly">
             </div>
             <div class="mb-3">
                 <label for="apellidoAutor" class="form-label">Apellido</label>
-                <input type="text" class="form-control" id="apellidoAutor" name="apellido" th:value="${apellido}">
+                <input type="text" class="form-control" id="apellidoAutor" name="apellido" th:value="${apellido}" readonly="readonly">
             </div>
-            <button type="submit" class="btn btn-primary">Guardar</button>
+            <button type="submit" class="btn btn-danger">Deshabilitar</button>
             <a class="btn btn-secondary" th:href="@{/autor/lista}">Volver</a>
         </form>
 
