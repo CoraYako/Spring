@@ -23,7 +23,7 @@
         <p th:if="${error != null}" th:text="${error}"></p>
     </div>
 
-    <form class="margenes-form" th:action="@{/libro/registro}" method="POST">
+    <form class="margenes-form" th:action="@{/libro/registrar}" method="POST">
         <div class="mb-3">
             <label for="libroIsbn" class="form-label">ISBN</label>
             <input type="text" class="form-control" id="lbroIsbn" name="isbn" th:value="${isbn}">
