@@ -14,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,7 +34,7 @@ public class LibroController {
     private EditorialServicio editorialServicio;
 
     @GetMapping("/lista")
-    public String inicio(ModelMap modelo) {
+    public String lista(ModelMap modelo) {
         List<Libro> libros = libroServicio.listarTodos();
 
         modelo.put("libros", libros);
@@ -41,8 +42,57 @@ public class LibroController {
         return "libro-lista.html";
     }
 
-    @GetMapping("/registrar-editar")
-    public String registroGet(ModelMap modelo, @RequestParam(required = false) String id) {
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @GetMapping("/registrar")
+    public String registrar(ModelMap modelo, @RequestParam(required = false) String id) {
+        List<Autor> autores = autorServicio.listarTodos();
+        List<Editorial> editoriales = editorialServicio.listarTodos();
+
+        Libro libro = new Libro();
+
+        try {
+            if (id != null && !id.trim().isEmpty()) {
+                libro = libroServicio.buscarPorId(id);
+            }
+
+            modelo.put("libro", libro);
+        } catch (ElementoNoEncontradoException | ErrorInputException ex) {
+            modelo.put("error", ex.getMessage());
+        }
+
+        modelo.put("autores", autores);
+        modelo.put("editoriales", editoriales);
+
+        return "libro-registro.html";
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @GetMapping("/editar/{id}")
+    public String editar(ModelMap modelo, @PathVariable String id) {
+        List<Autor> autores = autorServicio.listarTodos();
+        List<Editorial> editoriales = editorialServicio.listarTodos();
+
+        Libro libro = new Libro();
+
+        try {
+            if (id != null && !id.trim().isEmpty()) {
+                libro = libroServicio.buscarPorId(id);
+            }
+
+            modelo.put("libro", libro);
+        } catch (ElementoNoEncontradoException | ErrorInputException ex) {
+            modelo.put("error", ex.getMessage());
+        }
+
+        modelo.put("autores", autores);
+        modelo.put("editoriales", editoriales);
+
+        return "libro-registro.html";
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @GetMapping("/deshabilitar/{id}")
+    public String deshabilitarGet(ModelMap modelo, @PathVariable String id) {
         List<Autor> autores = autorServicio.listarTodos();
         List<Editorial> editoriales = editorialServicio.listarTodos();
 
@@ -65,10 +115,10 @@ public class LibroController {
     }
 
     @PostMapping("/registrar-editar")
-    public String registroPost(ModelMap modelo, @RequestParam(required = false) String id, @RequestParam String isbn,
-            @RequestParam String titulo, @RequestParam Integer anio, @RequestParam Integer ejemplares,
-            @RequestParam Integer prestados, @RequestParam Integer restantes, @RequestParam String idAutor,
-            @RequestParam String idEditorial) {
+    public String registroEdicion(ModelMap modelo, @RequestParam(required = false) String id,
+            @RequestParam String isbn, @RequestParam String titulo, @RequestParam Integer anio,
+            @RequestParam Integer ejemplares, @RequestParam Integer prestados,
+            @RequestParam Integer restantes, @RequestParam String idAutor, @RequestParam String idEditorial) {
         List<Autor> autores = autorServicio.listarTodos();
         List<Editorial> editoriales = editorialServicio.listarTodos();
 
@@ -81,9 +131,11 @@ public class LibroController {
             editorial = editorialServicio.buscarPorId(idEditorial);
 
             if (id == null || id.trim().isEmpty()) {
-                libro = libroServicio.crearYGuardar(isbn, titulo, anio, ejemplares, prestados, restantes, idAutor, idEditorial);
+                libro = libroServicio.crearYGuardar(isbn, titulo, anio, ejemplares,
+                        prestados, restantes, idAutor, idEditorial);
             } else {
-                libro = libroServicio.modificar(id, idAutor, idEditorial, isbn, titulo, anio, ejemplares, prestados, restantes);
+                libro = libroServicio.modificar(id, idAutor, idEditorial, isbn,
+                        titulo, anio, ejemplares, prestados, restantes);
             }
 
             modelo.put("libro", libro);
@@ -115,6 +167,31 @@ public class LibroController {
         modelo.put("editoriales", editoriales);
 
         return "libro-registro.html";
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PostMapping("/deshabilitar")
+    public String deshabilitarPost(ModelMap modelo, @RequestParam String id,
+            @RequestParam String idAutor, @RequestParam String idEditorial) {
+        List<Autor> autores = autorServicio.listarTodos();
+        List<Editorial> editoriales = editorialServicio.listarTodos();
+
+        try {
+            autorServicio.buscarPorId(idAutor);
+            editorialServicio.buscarPorId(idEditorial);
+
+            modelo.put("autores", autores);
+            modelo.put("editoriales", editoriales);
+
+            if (id == null || id.trim().isEmpty()) {
+                libroServicio.deshabilitar(id);
+            }
+
+        } catch (ElementoNoEncontradoException | ErrorInputException ex) {
+            modelo.put("error", ex.getMessage());
+        }
+
+        return "redirect:/libro/lista";
     }
 
 }

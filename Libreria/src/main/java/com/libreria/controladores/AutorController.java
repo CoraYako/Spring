@@ -48,6 +48,7 @@ public class AutorController {
         return "autor-registro.html";
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/editar/{id}")
     public String editar(ModelMap modelo, @PathVariable String id) {
         Autor autor = new Autor();
@@ -64,6 +65,7 @@ public class AutorController {
         return "autor-registro.html";
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/deshabilitar/{id}")
     public String deshabilitarGet(ModelMap modelo, @PathVariable String id) {
         Autor autor = new Autor();
@@ -80,6 +82,7 @@ public class AutorController {
         return "autor-deshabilitar.html";
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping("/deshabilitar")
     public String deshabilitarPost(ModelMap modelo, @RequestParam String id) {
         try {

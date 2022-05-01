@@ -38,7 +38,7 @@ public class FotoServicio {
 
     @Transactional(rollbackFor = Exception.class)
     public Foto actualizar(String idFoto, MultipartFile archivo) throws ErrorInputException {
-        if (archivo != null) {
+        if (archivo != null && !archivo.isEmpty()) {
             try {
                 Foto foto = new Foto();
 

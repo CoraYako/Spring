@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,7 +32,8 @@ public class EditorialController {
         return "editorial-lista.html";
     }
 
-    @GetMapping("/registrar-editar")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @GetMapping("/registrar")
     public String registro(ModelMap modelo, @RequestParam(required = false) String id) {
         Editorial editorial = new Editorial();
 
@@ -45,6 +47,51 @@ public class EditorialController {
 
         modelo.put("editorial", editorial);
         return "editorial-registro.html";
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @GetMapping("/editar/{id}")
+    public String editar(ModelMap modelo, @PathVariable String id) {
+        Editorial editorial = new Editorial();
+
+        try {
+            if (id != null && !id.trim().isEmpty()) {
+                editorial = editorialServicio.buscarPorId(id);
+            }
+        } catch (ElementoNoEncontradoException | ErrorInputException ex) {
+            modelo.put("error", ex.getMessage());
+        }
+
+        modelo.put("editorial", editorial);
+        return "editorial-registro.html";
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @GetMapping("/deshabilitar/{id}")
+    public String deshabilitarGet(ModelMap modelo, @PathVariable String id) {
+        Editorial editorial = new Editorial();
+
+        try {
+            if (id != null && !id.trim().isEmpty()) {
+                editorial = editorialServicio.buscarPorId(id);
+            }
+            modelo.put("editorial", editorial);
+        } catch (ElementoNoEncontradoException | ErrorInputException ex) {
+            modelo.put("error", ex.getMessage());
+        }
+
+        return "editorial-deshabilitar.html";
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PostMapping("/deshabilitar")
+    public String deshabilitarPost(ModelMap modelo, @RequestParam String id) {
+        try {
+            editorialServicio.deshabilitar(id);
+        } catch (ElementoNoEncontradoException | ErrorInputException ex) {
+            modelo.put("error", ex.getMessage());
+        }
+        return "redirect:/editorial/lista";
     }
 
     @PostMapping("/registrar-editar")
