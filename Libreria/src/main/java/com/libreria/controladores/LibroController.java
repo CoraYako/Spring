@@ -117,8 +117,8 @@ public class LibroController {
     @PostMapping("/registrar-editar")
     public String registroEdicion(ModelMap modelo, @RequestParam(required = false) String id,
             @RequestParam String isbn, @RequestParam String titulo, @RequestParam Integer anio,
-            @RequestParam Integer ejemplares, @RequestParam Integer prestados,
-            @RequestParam Integer restantes, @RequestParam String idAutor, @RequestParam String idEditorial) {
+            @RequestParam Integer ejemplares, @RequestParam(required = false) Integer prestados,
+            @RequestParam(required = false) Integer restantes, @RequestParam String idAutor, @RequestParam String idEditorial) {
         List<Autor> autores = autorServicio.listarTodos();
         List<Editorial> editoriales = editorialServicio.listarTodos();
 
@@ -131,8 +131,7 @@ public class LibroController {
             editorial = editorialServicio.buscarPorId(idEditorial);
 
             if (id == null || id.trim().isEmpty()) {
-                libro = libroServicio.crearYGuardar(isbn, titulo, anio, ejemplares,
-                        prestados, restantes, idAutor, idEditorial);
+                libro = libroServicio.crearYGuardar(isbn, titulo, anio, ejemplares, idAutor, idEditorial);
             } else {
                 libro = libroServicio.modificar(id, idAutor, idEditorial, isbn,
                         titulo, anio, ejemplares, prestados, restantes);

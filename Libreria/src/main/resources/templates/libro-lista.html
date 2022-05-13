@@ -40,44 +40,52 @@
             </ul>
         </div>
     </nav>
-    <div class="container padding-content--acordeon">
-        <a class="btn btn-dark bg-gradient" th:href="@{/libro/registrar}">Registrar Libro</a>
+    <br>
+    <div class="container">
+        <a class="btn btn-dark" th:href="@{/libro/registrar}">Registrar Libro</a>
         <br>
         <br>
-        <table class="table">
+        <table class="table table-hover">
             <thead>
                 <tr>
                     <th scope="col">#Id</th>
                     <th scope="col">ISBN</th>
                     <th scope="col">Título</th>
-                    <th scope="col">Año</th>
-                    <th scope="col">Ejemplares Disponibles</th>
-                    <th scope="col">Prestados</th>
-                    <th scope="col">Restantes</th>
+                    <th scope="col">Fecha Publicación</th>
                     <th scope="col">Autor</th>
                     <th scope="col">Editorial</th>
-                    <th scope="col">Fecha Alta</th>
+                    <th scope="col">Stock</th>
+                    <th scope="col">En Préstamo</th>
+                    <th scope="col">En Haber</th>
+                    <th scope="col">Fecha de Alta</th>
+                    <th scope="col">Activo</th>
+                    <th scope="col" sec:authorize="hasAnyRole('ROLE_ADMIN')">Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="libro : ${libros}">
-                    <th scope="row" th:text="${libro.id}"></th>
-                    <td th:text="${libro.isbn}"></td>
-                    <td th:text="${libro.titulo}"></td>
-                    <td th:text="${libro.anio}"></td>
-                    <td th:text="${libro.ejemplares}"></td>
-                    <td th:text="${libro.prestados}"></td>
-                    <td th:text="${libro.restantes}"></td>
-                    <td th:text="${libro.autor.nombre}"></td>
-                    <td th:text="${libro.editorial.nombre}"></td>
-                    <td th:text="${libro.alta}"></td>
+                <tr th:each="libros : ${libro}">
+                    <th th:if="${libro.activo}" scope="row" th:text="${libro.id}"></th>
+                    <td th:if="${libro.activo}" th:text="${libro.isbn}"></td>
+                    <td th:if="${libro.activo}" th:text="${libro.titulo}"></td>
+                    <td th:if="${libro.activo}" th:text="${libro.anio}"></td>
+                    <td th:if="${libro.activo}" th:text="${libro.autor}"></td>
+                    <td th:if="${libro.activo}" th:text="${libro.editorial}"></td>
+                    <td th:if="${libro.activo}" th:text="${libro.ejemplares}"></td>
+                    <td th:if="${libro.activo}" th:text="${libro.prestados}"></td>
+                    <td th:if="${libro.activo}" th:text="${libro.restantes}"></td>
+                    <td th:if="${libro.activo}" th:text="${libro.alta}"></td>
+                    <td th:if="${libro.activo}" th:text="${libro.activo}"></td>
+                    <td th:if="${libro.activo}" sec:authorize="hasAnyRole('ROLE_ADMIN')">
+                        <a th:href="@{/libro/editar/} + ${libro.id}" class="btn btn-primary">Editar</a>
+                        <a th:href="@{/libro/deshabilitar/} + ${libro.id}" class="btn btn-danger">Deshabilitar</a>
+                    </td>
                 </tr>
             </tbody>
         </table>
     </div>
+
     <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top mt-auto p-r p-l">
         <p class="col-md-4 mb-0 text-muted">&copy; 2022 Héctor A. Cortez</p>
-
         <ul class="nav col-md-4 justify-content-end">
             <li class="nav-item"><a th:href="@{/inicio}" class="nav-link px-2 text-muted">Inicio</a></li>
             <li class="nav-item"><a th:href="@{https://github.com/CoraYako/}"
