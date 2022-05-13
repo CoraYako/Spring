@@ -58,37 +58,27 @@ public class LibroServicio {
 
         validacion(isbn, titulo, anio, ejemplares, prestados, restantes, autor, editorial);
 
-        Optional<Libro> respuesta = libroRepositorio.findById(idLibro);
-        if (respuesta.isPresent()) {
-            Libro libro = respuesta.get();
-            libro.setIsbn(isbn);
-            libro.setTitulo(titulo);
-            libro.setAnio(anio);
-            libro.setEjemplares(ejemplares);
-            libro.setPrestados(prestados);
-            libro.setRestantes(restantes);
-            libro.setAutor(autor);
-            libro.setEditorial(editorial);
+        Libro libro = buscarPorId(idLibro);
 
-            return libroRepositorio.save(libro);
-        } else {
-            throw new ElementoNoEncontradoException("No se encontró el libro solicitado.");
-        }
+        libro.setIsbn(isbn);
+        libro.setTitulo(titulo);
+        libro.setAnio(anio);
+        libro.setEjemplares(ejemplares);
+        libro.setPrestados(prestados);
+        libro.setRestantes(restantes);
+        libro.setAutor(autor);
+        libro.setEditorial(editorial);
+
+        return libroRepositorio.save(libro);
     }
 
     @Transactional(rollbackFor = Exception.class)
     public void deshabilitar(String id) throws ErrorInputException, ElementoNoEncontradoException {
-        if (id == null || id.trim().isEmpty()) {
-            throw new ErrorInputException("El identificador proporcionado para el libro no es correcto.");
-        }
-        Optional<Libro> respuesta = libroRepositorio.findById(id);
-        if (respuesta.isPresent()) {
-            Libro libro = respuesta.get();
-            libro.setActivo(false);
-            libroRepositorio.save(libro);
-        } else {
-            throw new ElementoNoEncontradoException("No se encontró el libro solicitado.");
-        }
+        Libro libro = buscarPorId(id);
+
+        libro.setActivo(false);
+
+        libroRepositorio.save(libro);
     }
 
     @Transactional(readOnly = true)

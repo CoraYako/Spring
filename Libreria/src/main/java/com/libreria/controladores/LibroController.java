@@ -139,7 +139,7 @@ public class LibroController {
             }
 
             modelo.put("libro", libro);
-            modelo.put("titulo", "!Perfecto!");
+            modelo.put("guardado", "!Perfecto!");
             modelo.put("descripcion", "El Libro fue guardado satisfactoriamente en la base de datos.");
         } catch (ElementoNoEncontradoException | ErrorInputException ex) {
             libro.setId(id);

@@ -20,44 +20,35 @@ public class AutorServicio {
     @Transactional(rollbackFor = Exception.class)
     public Autor crearYGuardar(String nombre, String apellido) throws ErrorInputException {
         validacion(nombre, apellido);
+
         String nombreCompleto = nombre + ' ' + apellido;
+
         Autor a = new Autor();
         a.setNombre(nombreCompleto);
         a.setAlta(new Date());
         a.setActivo(true);
+
         return autorRepositorio.save(a);
     }
 
     @Transactional(rollbackFor = Exception.class)
     public Autor modificar(String id, String nombre, String apellido) throws ErrorInputException, ElementoNoEncontradoException {
-        if (id == null || id.trim().isEmpty()) {
-            throw new ErrorInputException("El ID no puede estar vacío.");
-        }
         validacion(nombre, apellido);
+
         String nombreCompleto = nombre + ' ' + apellido;
-        Optional<Autor> respuesta = autorRepositorio.findById(id);
-        if (respuesta.isPresent()) {
-            Autor a = respuesta.get();
-            a.setNombre(nombreCompleto);
-            return autorRepositorio.save(a);
-        } else {
-            throw new ElementoNoEncontradoException("No se encontró el autor solicitado.");
-        }
+
+        Autor a = buscarPorId(id);
+        a.setNombre(nombreCompleto);
+
+        return autorRepositorio.save(a);
     }
 
     @Transactional(rollbackFor = Exception.class)
     public Autor deshabilitar(String id) throws ErrorInputException, ElementoNoEncontradoException {
-        if (id == null || id.trim().isEmpty()) {
-            throw new ErrorInputException("El ID no puede estar vacío.");
-        }
-        Optional<Autor> respuesta = autorRepositorio.findById(id);
-        if (respuesta.isPresent()) {
-            Autor a = respuesta.get();
-            a.setActivo(false);
-            return autorRepositorio.save(a);
-        } else {
-            throw new ElementoNoEncontradoException("No se encontró el autor solicitado.");
-        }
+        Autor a = buscarPorId(id);
+        a.setActivo(false);
+
+        return autorRepositorio.save(a);
     }
 
     @Transactional(readOnly = true)

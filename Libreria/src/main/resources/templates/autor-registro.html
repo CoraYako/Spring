@@ -40,8 +40,8 @@
             </ul>
         </div>
     </nav>
-    <div class="container padding-content--inicio">
-        <h1>Administración de Autores</h1>
+    <div class="container padding-content--form">
+        <h2>Administración de Autores</h2>
         <p>Utilice éste módulo para
             <span th:text="${autor.id != null ? 'editar el' : 'registrar un nuevo'}"></span> autor.
         </p>
@@ -49,7 +49,7 @@
             <p class="danger-font" th:text="${error != null ? error : ''}"></p>
         </div>
         <div>
-            <h3 th:text="${titulo}"></h3>
+            <h5 th:text="${guardado}"></h5>
             <p th:text="${descripcion}"></p>
         </div>
         <form th:action="@{/autor/registrar-editar}" method="POST">

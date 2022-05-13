@@ -4,6 +4,7 @@ import com.libreria.entidades.Foto;
 import com.libreria.excepciones.ElementoNoEncontradoException;
 import com.libreria.excepciones.ErrorInputException;
 import com.libreria.repositorios.FotoRepositorio;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,16 +38,13 @@ public class FotoServicio {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public Foto actualizar(String idFoto, MultipartFile archivo) throws ErrorInputException {
+    public Foto actualizar(String idFoto, MultipartFile archivo) throws ErrorInputException, ElementoNoEncontradoException {
         if (archivo != null && !archivo.isEmpty()) {
             try {
                 Foto foto = new Foto();
 
                 if (idFoto != null) {
-                    Optional<Foto> respuesta = fotoRepositorio.findById(idFoto);
-                    if (respuesta.isPresent()) {
-                        foto = respuesta.get();
-                    }
+                    foto = buscarPorId(idFoto);
                 }
 
                 foto.setMime(archivo.getContentType());
@@ -54,7 +52,7 @@ public class FotoServicio {
                 foto.setContenido(archivo.getBytes());
 
                 return fotoRepositorio.save(foto);
-            } catch (Exception e) {
+            } catch (IOException e) {
                 System.err.println(e.getMessage());
             }
         }

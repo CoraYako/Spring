@@ -11,58 +11,106 @@
     <title>Registrar Libro</title>
 </head>
 
-<body>
-    <h1>Administración de Libros</h1>
-    <p>Utilice éste módulo para administrar la carga de libros a la base de datos</p>
-
-    <a th:href="@{/libro/lista}">Listar Libros</a>
-    <a th:href="@{/autor/registro}">Registrar Autor</a>
-    <a th:href="@{/editorial/registro}">Registrar Editorial</a>
-
-    <div>
-        <p th:if="${error != null}" th:text="${error}"></p>
+<body class="d-flex flex-column min-vh-100">
+    <nav class="navbar navbar-dark bg-dark bg-gradient navbar-expand-sm p-r p-l">
+        <a class="navbar-brand" th:href="@{/inicio}">
+            <img src="/../img/book.svg" width="30" height="30" alt="logo">
+            Librería
+        </a>
+        <div class="collapse navbar-collapse">
+            <ul class="ps-4 navbar-nav gap-4">
+                <li class="nav-item"><a class="nav-link" th:href="@{/autor/lista}">Autores</a></li>
+                <li class="nav-item"><a class="nav-link active" th:href="@{/libro/lista}">Libros</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/editorial/lista}">Editoriales</a></li>
+            </ul>
+        </div>
+        <div class="collapse navbar-collapse d-grid gap-2 d-md-flex justify-content-md-end" id="navbar-list-4">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/fox.jpg"
+                            width="40" height="40" class="rounded-circle">
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" th:href="@{#}">Editar Perfil</a>
+                        <a class="dropdown-item" th:href="@{/logout}">Cerrar sesión</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container padding-content--form">
+        <h2>Administración de Libros</h2>
+        <p>Utilice éste módulo para administrar la carga de libros a la base de datos</p>
+        <div>
+            <p th:if="${error != null}" th:text="${error}"></p>
+        </div>
+        <div>
+            <div>
+                <h5 th:text="${titulo}"></h5>
+                <p th:text="${descripcion}"></p>
+            </div>
+        </div>
+        <form th:action="@{/libro/registrar-editar}" method="POST">
+            <div class="mb-3">
+                <label for="libroIsbn" class="form-label">ISBN</label>
+                <input type="text" class="form-control" id="lbroIsbn" name="isbn" th:value="${isbn}">
+            </div>
+            <div class="mb-3">
+                <label for="libroTitulo" class="form-label">Título</label>
+                <input type="text" class="form-control" id="libroTitulo" name="titulo" th:value="${titulo}">
+            </div>
+            <div class="mb-3">
+                <label for="libroAnio" class="form-label">Año</label>
+                <input type="text" class="form-control" id="lbroAnio" name="anio" th:value="${anio}">
+            </div>
+            <div class="mb-3">
+                <label for="libroEjemplares" class="form-label">Ejemplares</label>
+                <input type="text" class="form-control" id="lbroEjemplares" name="ejemplares" th:value="${ejemplares}">
+            </div>
+            <div class="mb-3">
+                <label for="libroPrestados" class="form-label">Ejemplares Prestados</label>
+                <input type="text" class="form-control" id="lbroPrestados" name="prestados" th:value="${prestados}">
+            </div>
+            <div class="mb-3">
+                <label for="libroRestantes" class="form-label">Ejemplares Restantes</label>
+                <input type="text" class="form-control" id="lbroRestantes" name="restantes" th:value="${restantes}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Autor</label>
+                <select class="form-select" name="idAutor">
+                    <option selected disabled>Seleccione un autor</option>
+                    <option th:each="autor : ${autores}" th:if="${autor.activo}" th:value="${autor.id}"
+                        th:text="${autor.nombre}"></option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Editorial</label>
+                <select class="form-select" name="idEditorial">
+                    <option selected disabled>Seleccione una editorial</option>
+                    <option th:each="editorial : ${editoriales}" th:if="${editorial.activo}" th:value="${editorial.id}"
+                        th:text="${editorial.nombre}">
+                    </option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a class="btn btn-secondary" th:href="@{/libro/lista}">Volver</a>
+        </form>
     </div>
-
-    <form class="margenes-form" th:action="@{/libro/registro}" method="POST">
-        <div class="mb-3">
-            <label for="libroIsbn" class="form-label">ISBN</label>
-            <input type="text" class="form-control" id="lbroIsbn" name="isbn" th:value="${isbn}">
-        </div>
-        <div class="mb-3">
-            <label for="libroTitulo" class="form-label">Título</label>
-            <input type="text" class="form-control" id="libroTitulo" name="titulo" th:value="${titulo}">
-        </div>
-        <div class="mb-3">
-            <label for="libroAnio" class="form-label">Año</label>
-            <input type="text" class="form-control" id="lbroAnio" name="anio" th:value="${anio}">
-        </div>
-        <div class="mb-3">
-            <label for="libroEjemplares" class="form-label">Ejemplares</label>
-            <input type="text" class="form-control" id="lbroEjemplares" name="ejemplares" th:value="${ejemplares}">
-        </div>
-        <div class="mb-3">
-            <label for="libroPrestados" class="form-label">Ejemplares Prestados</label>
-            <input type="text" class="form-control" id="lbroPrestados" name="prestados" th:value="${prestados}">
-        </div>
-        <div class="mb-3">
-            <label for="libroRestantes" class="form-label">Ejemplares Restantes</label>
-            <input type="text" class="form-control" id="lbroRestantes" name="restantes" th:value="${restantes}">
-        </div>
-
-        <select class="form-select" name="idAutor">
-            <option selected>Seleccione un autor</option>
-            <option th:each="autor : ${autores}" th:value="${autor.id}" th:text="${autor.nombre}"></option>
-        </select>
-
-        <select class="form-select" name="idEditorial">
-            <option selected>Seleccione una editorial</option>
-            <option th:each="editorial : ${editoriales}" th:value="${editorial.id}" th:text="${editorial.nombre}">
-            </option>
-        </select>
-
-        <button type="submit" class="btn btn-primary">Guardar</button>
-    </form>
-
+    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top mt-auto p-r p-l">
+        <p class="col-md-4 mb-0 text-muted">&copy; 2022 Héctor A. Cortez</p>
+        <ul class="nav col-md-4 justify-content-end">
+            <li class="nav-item"><a th:href="@{/inicio}" class="nav-link px-2 text-muted">Inicio</a></li>
+            <li class="nav-item"><a th:href="@{https://github.com/CoraYako/}"
+                    class="nav-link px-2 text-muted">GitHub</a></li>
+            <li class="nav-item"><a th:href="@{https://www.linkedin.com/in/hector-cortez-cy/}"
+                    class="nav-link px-2 text-muted">LinkedIn</a></li>
+        </ul>
+    </footer>
+    <script src='https://code.jquery.com/jquery-3.3.1.slim.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js'></script>
+    <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
