@@ -32,29 +32,21 @@ public class EditorialServicio {
     @Transactional(rollbackFor = Exception.class)
     public Editorial modificar(String id, String nombre) throws ErrorInputException, ElementoNoEncontradoException {
         validacion(id, nombre);
-        Optional<Editorial> respuesta = editorialRepositorio.findById(id);
-        if (respuesta.isPresent()) {
-            Editorial e = respuesta.get();
-            e.setNombre(nombre);
-            return editorialRepositorio.save(e);
-        } else {
-            throw new ElementoNoEncontradoException("No se encontró la Editorial solicitada.");
-        }
+
+        Editorial e = buscarPorId(id);
+
+        e.setNombre(nombre);
+
+        return editorialRepositorio.save(e);
     }
 
     @Transactional(rollbackFor = Exception.class)
     public Editorial deshabilitar(String id) throws ErrorInputException, ElementoNoEncontradoException {
-        if (id == null || id.trim().isEmpty()) {
-            throw new ErrorInputException("Debe indicar un identificador válido para la Editorial.");
-        }
-        Optional<Editorial> respuesta = editorialRepositorio.findById(id);
-        if (respuesta.isPresent()) {
-            Editorial e = respuesta.get();
-            e.setActivo(false);
-            return editorialRepositorio.save(e);
-        } else {
-            throw new ElementoNoEncontradoException("No se encontró la Editorial solicitada.");
-        }
+        Editorial e = buscarPorId(id);
+
+        e.setActivo(false);
+
+        return editorialRepositorio.save(e);
     }
 
     @Transactional(readOnly = true)

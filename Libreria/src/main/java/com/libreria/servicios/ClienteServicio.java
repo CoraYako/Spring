@@ -34,38 +34,25 @@ public class ClienteServicio {
 
     @Transactional(rollbackFor = Exception.class)
     public Cliente modificar(String id, Integer documento, String Nombre, String apellido, String telefono) throws ErrorInputException, ElementoNoEncontradoException {
-        if (id == null || id.trim().isEmpty()) {
-            throw new ErrorInputException("Debe de indicar el identificador correcto para el Cliente.");
-        }
         validacion(documento, Nombre, apellido, telefono);
 
-        Optional<Cliente> respuesta = clienteRepositorio.findById(id);
-        if (respuesta.isPresent()) {
-            Cliente cliente = respuesta.get();
+        Cliente cliente = buscarPorId(id);
 
-            cliente.setDocumento(documento);
-            cliente.setNombre(Nombre);
-            cliente.setApellido(apellido);
-            cliente.setTelefono(telefono);
-            return clienteRepositorio.save(cliente);
-        } else {
-            throw new ElementoNoEncontradoException("No se encontró el Cliente solicitado.");
-        }
+        cliente.setDocumento(documento);
+        cliente.setNombre(Nombre);
+        cliente.setApellido(apellido);
+        cliente.setTelefono(telefono);
+
+        return clienteRepositorio.save(cliente);
     }
 
     @Transactional(rollbackFor = Exception.class)
     public Cliente deshabilitar(String id) throws ErrorInputException, ElementoNoEncontradoException {
-        if (id == null || id.trim().isEmpty()) {
-            throw new ErrorInputException("Debe de indicar un identificador correcto para el Cliente.");
-        }
-        Optional<Cliente> respuesta = clienteRepositorio.findById(id);
-        if (respuesta.isPresent()) {
-            Cliente cliente = respuesta.get();
-            cliente.setActivo(false);
-            return clienteRepositorio.save(cliente);
-        } else {
-            throw new ElementoNoEncontradoException("No se encontró el Cliente solicitado.");
-        }
+        Cliente cliente = buscarPorId(id);
+
+        cliente.setActivo(false);
+
+        return clienteRepositorio.save(cliente);
     }
 
     @Transactional(readOnly = true)

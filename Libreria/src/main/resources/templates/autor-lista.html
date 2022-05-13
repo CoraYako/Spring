@@ -12,20 +12,16 @@
 </head>
 
 <body class="d-flex flex-column min-vh-100">
-    <nav class="navbar navbar-dark bg-dark navbar-expand-sm p-r p-l">
+    <nav class="navbar navbar-dark bg-dark bg-gradient navbar-expand-sm p-r p-l">
         <a class="navbar-brand" th:href="@{/inicio}">
             <img src="../img/book.svg" width="30" height="30" alt="logo">
-            Inicio
+            Librería
         </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-list-4"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
         <div class="collapse navbar-collapse">
-            <ul class="navbar-nav gap-2">
-                <li class="nav-item"><a class="btn btn-outline-light" th:href="@{/libro/lista}">Libros</a></li>
-                <li class="nav-item"><a class="btn btn-outline-light" th:href="@{/autor/lista}">Autores</a></li>
-                <li class="nav-item"><a class="btn btn-outline-light" th:href="@{/editorial/lista}">Editoriales</a></li>
+            <ul class="ps-4 navbar-nav gap-4">
+                <li class="nav-item"><a class="nav-link active" th:href="@{/autor/lista}">Autores</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/libro/lista}">Libros</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/editorial/lista}">Editoriales</a></li>
             </ul>
         </div>
         <div class="collapse navbar-collapse d-grid gap-2 d-md-flex justify-content-md-end" id="navbar-list-4">
@@ -38,16 +34,14 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" th:href="@{#}">Editar Perfil</a>
-                        <a class="dropdown-item" th:href="@{/logout}">Log Out</a>
+                        <a class="dropdown-item" th:href="@{/logout}">Cerrar sesión</a>
                     </div>
                 </li>
             </ul>
         </div>
     </nav>
-
-    <br>
-    <div class="container">
-        <a class="btn btn-dark" th:href="@{/autor/registrar}">Registrar Autor</a>
+    <div class="container padding-content--acordeon">
+        <a class="btn btn-dark bg-gradient" th:href="@{/autor/registrar}">Registrar Autor</a>
         <br>
         <br>
         <table class="table table-hover">

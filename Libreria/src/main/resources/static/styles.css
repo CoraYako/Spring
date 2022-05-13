@@ -10,11 +10,11 @@
 }
 
 .p-r {
-    padding-left: 10%;
+    padding-right: 10%;
 }
 
 .p-l {
-    padding-right: 10%;
+    padding-left: 10%;
 }
 
 .succesful-font {
@@ -36,4 +36,47 @@
 
 .link:hover {
     color: white;
+}
+
+.border-hover:hover {
+    border: 1px solid black;
+}
+
+.padding-form {
+    padding-top: 2rem;
+    padding-left: 20rem;
+    padding-right: 20rem;
+}
+
+.padding-content {
+    padding-top: 3rem;
+    padding-left: 10rem;
+    padding-right: 10rem;
+}
+
+.padding-content--inicio {
+    padding-top: 1.5rem;
+    padding-left: 10rem;
+    padding-right: 10rem;
+    padding-bottom: 3rem;
+}
+
+.padding-content--form {
+    padding-top: 1.5rem;
+    padding-left: 17rem;
+    padding-right: 17rem;
+    padding-bottom: 3rem;
+}
+
+.login-box {
+    width: 450px;
+    height: 450px;
+    padding-top: 3rem;
+}
+
+.padding-content--acordeon {
+    padding-top: 2rem;
+    padding-left: 10rem;
+    padding-right: 10rem;
+    padding-bottom: 3rem;
 }

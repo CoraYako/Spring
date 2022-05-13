@@ -64,6 +64,7 @@ public class LibroServicio {
         validacion(isbn, titulo, anio, ejemplares, autor, editorial);
 
         Libro libro = buscarPorId(id);
+      
         libro.setIsbn(isbn);
         libro.setTitulo(titulo);
         libro.setAnio(anio);

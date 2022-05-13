@@ -12,20 +12,16 @@
 </head>
 
 <body class="d-flex flex-column min-vh-100">
-    <nav class="navbar navbar-dark bg-dark navbar-expand-sm p-r p-l">
+    <nav class="navbar navbar-dark bg-dark bg-gradient navbar-expand-sm p-r p-l">
         <a class="navbar-brand" th:href="@{/inicio}">
             <img src="/../img/book.svg" width="30" height="30" alt="logo">
-            Inicio
+            Librería
         </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-list-4"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
         <div class="collapse navbar-collapse">
-            <ul class="navbar-nav gap-2">
-                <li class="nav-item"><a class="btn btn-outline-light" th:href="@{/libro/lista}">Libros</a></li>
-                <li class="nav-item"><a class="btn btn-outline-light" th:href="@{/autor/lista}">Autores</a></li>
-                <li class="nav-item"><a class="btn btn-outline-light" th:href="@{/editorial/lista}">Editoriales</a></li>
+            <ul class="ps-4 navbar-nav gap-4">
+                <li class="nav-item"><a class="nav-link" th:href="@{/autor/lista}">Autores</a></li>
+                <li class="nav-item"><a class="nav-link active" th:href="@{/libro/lista}">Libros</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/editorial/lista}">Editoriales</a></li>
             </ul>
         </div>
         <div class="collapse navbar-collapse d-grid gap-2 d-md-flex justify-content-md-end" id="navbar-list-4">
@@ -38,77 +34,72 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" th:href="@{#}">Editar Perfil</a>
-                        <a class="dropdown-item" th:href="@{/logout}">Log Out</a>
+                        <a class="dropdown-item" th:href="@{/logout}">Cerrar sesión</a>
                     </div>
                 </li>
             </ul>
         </div>
     </nav>
-    <br>
-    <div class="container">
-        <h1>Administración de Libros</h1>
-        <p>Utilice éste módulo para
-            <span th:text="${libro.id != null ? 'editar el' : 'registrar un nuevo'}"></span> libro.
-        </p>
-
+    <div class="container padding-content--form">
+        <h2>Administración de Libros</h2>
+        <p>Utilice éste módulo para administrar la carga de libros a la base de datos</p>
         <div>
-            <p class="danger-font" th:text="${error != null ? error : ''}"></p>
+            <p th:if="${error != null}" th:text="${error}"></p>
         </div>
-
         <div>
-            <h3 th:text="${titulo}"></h3>
-            <p th:text="${descripcion}"></p>
+            <div>
+                <h5 th:text="${titulo}"></h5>
+                <p th:text="${descripcion}"></p>
+            </div>
         </div>
-
         <form th:action="@{/libro/registrar-editar}" method="POST">
-            <input type="hidden" name="id" th:value="${libro.id}">
             <div class="mb-3">
-                <label for="codigoIsbn" class="form-label">ISBN</label>
-                <input type="text" class="form-control" id="codigoIsbn" name="isbn"
-                    th:value="${libro != null ? libro.isbn : (isbn)}">
+                <label for="libroIsbn" class="form-label">ISBN</label>
+                <input type="text" class="form-control" id="lbroIsbn" name="isbn" th:value="${isbn}">
             </div>
             <div class="mb-3">
-                <label for="tituloLibro" class="form-label">Título</label>
-                <input type="text" class="form-control" id="tituloLibro" name="titulo" th:value="${titulo}">
+                <label for="libroTitulo" class="form-label">Título</label>
+                <input type="text" class="form-control" id="libroTitulo" name="titulo" th:value="${titulo}">
             </div>
             <div class="mb-3">
-                <label for="anioLibro" class="form-label">Año Publicación</label>
-                <input type="text" class="form-control" id="anioLibro" name="anio" th:value="${anio}">
+                <label for="libroAnio" class="form-label">Año</label>
+                <input type="text" class="form-control" id="lbroAnio" name="anio" th:value="${anio}">
             </div>
             <div class="mb-3">
-                <label for="ejemplaresLibro" class="form-label">Ejemplares</label>
-                <input type="text" class="form-control" id="ejemplaresLibro" name="ejemplares" th:value="${ejemplares}">
+                <label for="libroEjemplares" class="form-label">Ejemplares</label>
+                <input type="text" class="form-control" id="lbroEjemplares" name="ejemplares" th:value="${ejemplares}">
             </div>
             <div class="mb-3">
-                <label for="librosPrestados" class="form-label">Prestados</label>
-                <input type="text" class="form-control" id="librosPrestados" name="prestados" th:value="${prestados}">
+                <label for="libroPrestados" class="form-label">Ejemplares Prestados</label>
+                <input type="text" class="form-control" id="lbroPrestados" name="prestados" th:value="${prestados}">
             </div>
             <div class="mb-3">
-                <label for="librosRestantes" class="form-label">Restantes</label>
-                <input type="text" class="form-control" id="librosRestantes" name="restantes" th:value="${restantes}">
+                <label for="libroRestantes" class="form-label">Ejemplares Restantes</label>
+                <input type="text" class="form-control" id="lbroRestantes" name="restantes" th:value="${restantes}">
             </div>
             <div class="mb-3">
                 <label class="form-label">Autor</label>
-                <select class="form-select" name="autor">
+                <select class="form-select" name="idAutor">
                     <option selected disabled>Seleccione un autor</option>
-                    <option th:each="autor : ${autores}" th:value="${autor.id}" th:text="${autor.nombre}"></option>
+                    <option th:each="autor : ${autores}" th:if="${autor.activo}" th:value="${autor.id}"
+                        th:text="${autor.nombre}"></option>
                 </select>
             </div>
             <div class="mb-3">
                 <label class="form-label">Editorial</label>
-                <select class="form-select" name="editorial">
+                <select class="form-select" name="idEditorial">
                     <option selected disabled>Seleccione una editorial</option>
-                    <option th:each="editorial : ${editoriales}" th:value="${editorial.id}" th:text="${editorial.nombre}"></option>
+                    <option th:each="editorial : ${editoriales}" th:if="${editorial.activo}" th:value="${editorial.id}"
+                        th:text="${editorial.nombre}">
+                    </option>
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">Guardar</button>
             <a class="btn btn-secondary" th:href="@{/libro/lista}">Volver</a>
         </form>
     </div>
-
     <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top mt-auto p-r p-l">
         <p class="col-md-4 mb-0 text-muted">&copy; 2022 Héctor A. Cortez</p>
-
         <ul class="nav col-md-4 justify-content-end">
             <li class="nav-item"><a th:href="@{/inicio}" class="nav-link px-2 text-muted">Inicio</a></li>
             <li class="nav-item"><a th:href="@{https://github.com/CoraYako/}"
@@ -117,7 +108,6 @@
                     class="nav-link px-2 text-muted">LinkedIn</a></li>
         </ul>
     </footer>
-
     <script src='https://code.jquery.com/jquery-3.3.1.slim.min.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js'></script>
     <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js'></script>

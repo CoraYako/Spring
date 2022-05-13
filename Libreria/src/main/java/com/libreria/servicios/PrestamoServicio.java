@@ -27,13 +27,13 @@ public class PrestamoServicio {
 
     @Transactional(rollbackFor = Exception.class)
     public Prestamo crearYGuardar(Date prestamo, Date devolucion, String idLibro, String idCliente) throws ErrorInputException, ElementoNoEncontradoException {
-        validacion(prestamo, devolucion, idLibro, idCliente);
-        
         Libro libro = libroServicio.buscarPorId(idLibro);
         Cliente cliente = clienteServicio.buscarPorId(idCliente);
 
+        validacion(prestamo, devolucion, libro, cliente);
+
         Prestamo p = new Prestamo();
-        
+
         p.setPrestamo(prestamo);
         p.setDevolucion(devolucion);
         p.setLibro(libro);
@@ -44,41 +44,30 @@ public class PrestamoServicio {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public Prestamo modificar(String idPrestamo, String idCliente, String idLibro,
+    public Prestamo modificar(String id, String idCliente, String idLibro,
             Date prestamo, Date devolucion) throws ErrorInputException, ElementoNoEncontradoException {
         Libro libro = libroServicio.buscarPorId(idLibro);
         Cliente cliente = clienteServicio.buscarPorId(idCliente);
 
-        validacion(prestamo, devolucion, idLibro, idCliente);
+        validacion(prestamo, devolucion, libro, cliente);
 
-        Optional<Prestamo> respuesta = prestamoRepositorio.findById(idPrestamo);
-        if (respuesta.isPresent()) {
-            Prestamo p = respuesta.get();
+        Prestamo p = buscarPorId(id);
 
-            p.setPrestamo(prestamo);
-            p.setDevolucion(devolucion);
-            p.setLibro(libro);
-            p.setCliente(cliente);
+        p.setPrestamo(prestamo);
+        p.setDevolucion(devolucion);
+        p.setLibro(libro);
+        p.setCliente(cliente);
 
-            return prestamoRepositorio.save(p);
-        } else {
-            throw new ElementoNoEncontradoException("No se encontró el Préstamo solicitado.");
-        }
+        return prestamoRepositorio.save(p);
     }
 
     @Transactional(rollbackFor = Exception.class)
     public Prestamo deshabilitar(String id) throws ErrorInputException, ElementoNoEncontradoException {
-        if (id == null || id.trim().isEmpty()) {
-            throw new ErrorInputException("Debe de indicar un identificador válido para el Préstamo.");
-        }
-        Optional<Prestamo> respuesta = prestamoRepositorio.findById(id);
-        if (respuesta.isPresent()) {
-            Prestamo p = respuesta.get();
-            p.setActivo(false);
-            return prestamoRepositorio.save(p);
-        } else {
-            throw new ElementoNoEncontradoException("No se encontró el Préstamo solicitado.");
-        }
+        Prestamo p = buscarPorId(id);
+
+        p.setActivo(false);
+
+        return prestamoRepositorio.save(p);
     }
 
     @Transactional(readOnly = true)
@@ -104,17 +93,17 @@ public class PrestamoServicio {
         return prestamoRepositorio.buscarActivos();
     }
 
-    private void validacion(Date prestamo, Date devolucion, String idLibro, String idCliente) throws ErrorInputException {
+    private void validacion(Date prestamo, Date devolucion, Libro libro, Cliente cliente) throws ErrorInputException {
         if (prestamo == null) {
             throw new ErrorInputException("Debe de indicar la fecha de inicio del Préstamo.");
         }
         if (devolucion == null) {
             throw new ErrorInputException("Debe de indicar una fecha de devolución para el Préstamo.");
         }
-        if (idLibro == null || idLibro.trim().isEmpty()) {
+        if (libro == null) {
             throw new ErrorInputException("Debe de indicar el Libro a prestar.");
         }
-        if (idCliente == null || idCliente.trim().isEmpty()) {
+        if (cliente == null) {
             throw new ErrorInputException("Debe de indicar el Cliente.");
         }
     }

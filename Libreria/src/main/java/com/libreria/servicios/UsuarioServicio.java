@@ -63,39 +63,29 @@ public class UsuarioServicio implements UserDetailsService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public Usuario modificar(MultipartFile archivo, String idUsuario, String nombre, String apellido,
+    public Usuario modificar(MultipartFile archivo, String id, String nombre, String apellido,
             Genero genero, String mail, String clave1, String clave2) throws ErrorInputException, ElementoNoEncontradoException {
-        if (idUsuario == null || idUsuario.trim().isEmpty()) {
-            throw new ErrorInputException("El identificador del usuario no puede ser nulo.");
-        }
-
         validacion(nombre, apellido, genero, mail, clave1, clave2);
 
-        Optional<Usuario> respuesta = usuarioRepositorio.findById(idUsuario);
-        if (respuesta.isPresent()) {
-            Usuario usuario = respuesta.get();
+        Usuario usuario = buscarPorId(id);
 
-            usuario.setNombre(nombre);
-            usuario.setApellido(apellido);
-            usuario.setGenero(genero);
-            usuario.setMail(mail);
+        usuario.setNombre(nombre);
+        usuario.setApellido(apellido);
+        usuario.setGenero(genero);
+        usuario.setMail(mail);
 
-            String claveEncriptada = new BCryptPasswordEncoder().encode(clave1);
-            usuario.setClave(claveEncriptada);
+        String claveEncriptada = new BCryptPasswordEncoder().encode(clave1);
+        usuario.setClave(claveEncriptada);
 
-            String idFoto = null;
-            if (usuario.getFoto().getId() != null) {
-                idFoto = usuario.getFoto().getId();
-            }
-
-            Foto foto = fotoServicio.actualizar(idFoto, archivo);
-
-            usuario.setFoto(foto);
-
-            return usuarioRepositorio.save(usuario);
-        } else {
-            throw new ElementoNoEncontradoException("No se encontró el usuario solicitado.");
+        String idFoto = null;
+        if (usuario.getFoto().getId() != null) {
+            idFoto = usuario.getFoto().getId();
         }
+
+        Foto foto = fotoServicio.actualizar(idFoto, archivo);
+        usuario.setFoto(foto);
+
+        return usuarioRepositorio.save(usuario);
     }
 
     @Transactional(readOnly = true)
