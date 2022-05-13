@@ -41,40 +41,28 @@
         </div>
     </nav>
     <br>
-    <div class="container">
+    <div class="container padding-content--acordeon">
         <a class="btn btn-dark" th:href="@{/libro/registrar}">Registrar Libro</a>
-        <br>
-        <br>
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th scope="col">#Id</th>
                     <th scope="col">ISBN</th>
                     <th scope="col">Título</th>
                     <th scope="col">Fecha Publicación</th>
                     <th scope="col">Autor</th>
                     <th scope="col">Editorial</th>
                     <th scope="col">Stock</th>
-                    <th scope="col">En Préstamo</th>
-                    <th scope="col">En Haber</th>
-                    <th scope="col">Fecha de Alta</th>
-                    <th scope="col">Activo</th>
                     <th scope="col" sec:authorize="hasAnyRole('ROLE_ADMIN')">Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="libros : ${libro}">
-                    <th th:if="${libro.activo}" scope="row" th:text="${libro.id}"></th>
+                <tr th:each="libro : ${libros}">
                     <td th:if="${libro.activo}" th:text="${libro.isbn}"></td>
                     <td th:if="${libro.activo}" th:text="${libro.titulo}"></td>
                     <td th:if="${libro.activo}" th:text="${libro.anio}"></td>
-                    <td th:if="${libro.activo}" th:text="${libro.autor}"></td>
-                    <td th:if="${libro.activo}" th:text="${libro.editorial}"></td>
+                    <td th:if="${libro.activo}" th:text="${libro.autor.nombre}"></td>
+                    <td th:if="${libro.activo}" th:text="${libro.editorial.nombre}"></td>
                     <td th:if="${libro.activo}" th:text="${libro.ejemplares}"></td>
-                    <td th:if="${libro.activo}" th:text="${libro.prestados}"></td>
-                    <td th:if="${libro.activo}" th:text="${libro.restantes}"></td>
-                    <td th:if="${libro.activo}" th:text="${libro.alta}"></td>
-                    <td th:if="${libro.activo}" th:text="${libro.activo}"></td>
                     <td th:if="${libro.activo}" sec:authorize="hasAnyRole('ROLE_ADMIN')">
                         <a th:href="@{/libro/editar/} + ${libro.id}" class="btn btn-primary">Editar</a>
                         <a th:href="@{/libro/deshabilitar/} + ${libro.id}" class="btn btn-danger">Deshabilitar</a>
