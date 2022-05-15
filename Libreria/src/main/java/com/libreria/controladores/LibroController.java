@@ -194,9 +194,8 @@ public class LibroController {
 
     @GetMapping("/detalle/{id}")
     public String detalle(ModelMap modelo, @PathVariable String id) {
-        Libro libro = new Libro();
         try {
-            libro = libroServicio.buscarPorId(id);
+            Libro libro = libroServicio.buscarPorId(id);
             modelo.put("libro", libro);
         } catch (ErrorInputException | ElementoNoEncontradoException ex) {
             modelo.put("error", ex.getMessage());

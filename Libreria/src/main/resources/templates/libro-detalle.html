@@ -50,15 +50,17 @@
                 </p>
             </div>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item"><strong>Año de publicación:</strong> <span th:text="${libro.anio}"></span></li>
+                <li class="list-group-item"><strong>Año de publicación:</strong> <span th:text="${libro.anio}"></span>
+                </li>
                 <li class="list-group-item"><strong>Autor:</strong> <span th:text="${libro.autor.nombre}"></span></li>
-                <li class="list-group-item"><strong>Editorial:</strong> <span th:text="${libro.editorial.nombre}"></span></li>
-                <li class="list-group-item"><strong>ID:</strong> <span th:text="${libro.id}"></span></li>
+                <li class="list-group-item"><strong>Editorial:</strong> <span
+                        th:text="${libro.editorial.nombre}"></span></li>
                 <li class="list-group-item"><strong>ISBN:</strong> <span th:text="${libro.isbn}"></span></li>
+                <li class="list-group-item"><strong>ID:</strong> <span th:text="${libro.id}"></span></li>
             </ul>
             <div class="card-body">
-                <a th:href="#" class="card-link">Card link</a>
-                <a th:href="#" class="card-link">Another link</a>
+                <a th:href="@{/libro/editar}" class="card-link">Editar</a>
+                <a th:href="@{/libro/deshabilitar}" class="card-link">Deshabilitar</a>
             </div>
         </div>
     </div>
