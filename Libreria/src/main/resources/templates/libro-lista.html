@@ -40,19 +40,21 @@
             </ul>
         </div>
     </nav>
-    <br>
     <div class="container padding-content--acordeon">
-        <a class="btn btn-dark" th:href="@{/libro/registrar}">Registrar Libro</a>
+        <a class="btn btn-dark bg-gradient" th:href="@{/libro/registrar}">Registrar Libro</a>
+        <br>
+        <br>
         <table class="table table-hover">
-            <thead>
+            <thead class="table-dark">
                 <tr>
                     <th scope="col">ISBN</th>
                     <th scope="col">Título</th>
-                    <th scope="col">Fecha Publicación</th>
+                    <th scope="col">Año</th>
                     <th scope="col">Autor</th>
                     <th scope="col">Editorial</th>
-                    <th scope="col">Stock</th>
-                    <th scope="col" sec:authorize="hasAnyRole('ROLE_ADMIN')">Acciones</th>
+                    <th scope="col">En Stock</th>
+                    <!-- <th scope="col" sec:authorize="hasAnyRole('ROLE_ADMIN')">Acciones</th> -->
+                    <th scope="col">Detalle</th>
                 </tr>
             </thead>
             <tbody>
@@ -63,9 +65,9 @@
                     <td th:if="${libro.activo}" th:text="${libro.autor.nombre}"></td>
                     <td th:if="${libro.activo}" th:text="${libro.editorial.nombre}"></td>
                     <td th:if="${libro.activo}" th:text="${libro.ejemplares}"></td>
-                    <td th:if="${libro.activo}" sec:authorize="hasAnyRole('ROLE_ADMIN')">
-                        <a th:href="@{/libro/editar/} + ${libro.id}" class="btn btn-primary">Editar</a>
-                        <a th:href="@{/libro/deshabilitar/} + ${libro.id}" class="btn btn-danger">Deshabilitar</a>
+                    <td th:if="${libro.activo}">
+                        <!-- <td th:if="${libro.activo}" sec:authorize="hasAnyRole('ROLE_ADMIN')"> -->
+                        <a th:href="@{/libro/detalle/} + ${libro.id}" class="btn btn-primary">Ver más</a>
                     </td>
                 </tr>
             </tbody>

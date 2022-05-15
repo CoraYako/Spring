@@ -42,7 +42,6 @@ public class LibroController {
         return "libro-lista.html";
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/registrar")
     public String registrar(ModelMap modelo, @RequestParam(required = false) String id) {
         List<Autor> autores = autorServicio.listarTodos();
@@ -191,6 +190,18 @@ public class LibroController {
         }
 
         return "redirect:/libro/lista";
+    }
+
+    @GetMapping("/detalle/{id}")
+    public String detalle(ModelMap modelo, @PathVariable String id) {
+        Libro libro = new Libro();
+        try {
+            libro = libroServicio.buscarPorId(id);
+            modelo.put("libro", libro);
+        } catch (ErrorInputException | ElementoNoEncontradoException ex) {
+            modelo.put("error", ex.getMessage());
+        }
+        return "libro-detalle.html";
     }
 
 }
